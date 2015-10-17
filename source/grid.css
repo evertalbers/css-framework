@@ -1,0 +1,1150 @@
+/* Flex Grid */
+
+*,
+::after,
+::before {
+    box-sizing: border-box
+}
+
+
+.align,
+.flex {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex
+}
+
+.flex {
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row
+}
+
+.flex.col {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column
+}
+
+.flex>*,
+.align>* {
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    -webkit-flex-shrink: 1;
+        -ms-flex-negative: 1;
+            flex-shrink: 1;
+    -webkit-flex-basis: auto;
+        -ms-flex-preferred-size: auto;
+            flex-basis: auto;
+    margin: 0;
+    padding: 0;
+    box-sizing: content-box;
+}
+.flex.margin{
+    padding: 1em;
+}
+.flex.margin>* {
+    margin: 1em
+}
+
+.flex.padding>* {
+    padding: 1em
+}
+
+.flex>.no-grow {
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+        -ms-flex-positive: 0;
+            flex-grow: 0
+}
+
+.flex>.no-shrink {
+    -webkit-flex-shrink: 0;
+        -ms-flex-negative: 0;
+            flex-shrink: 0
+}
+
+.align.center.center {
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center
+}
+
+.align.center.left {
+    -webkit-box-pack: start;
+    -webkit-justify-content: flex-start;
+        -ms-flex-pack: start;
+            justify-content: flex-start
+}
+
+.align.center.right {
+    -webkit-box-pack: end;
+    -webkit-justify-content: flex-end;
+        -ms-flex-pack: end;
+            justify-content: flex-end
+}
+
+.align.center.space-around {
+    -webkit-justify-content: space-around;
+        -ms-flex-pack: distribute;
+            justify-content: space-around;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row
+}
+
+.align.center.space-between {
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+            flex-direction: row
+}
+
+.flex.margin>.one,
+.flex.padding>.one {
+    -webkit-flex-basis: calc(8.333333333% - 2em);
+        -ms-flex-preferred-size: calc(8.333333333% - 2em);
+            flex-basis: calc(8.333333333% - 2em)
+}
+
+.flex.margin>.two,
+.flex.padding>.two {
+    -webkit-flex-basis: calc(16.666666667% - 2em);
+        -ms-flex-preferred-size: calc(16.666666667% - 2em);
+            flex-basis: calc(16.666666667% - 2em)
+}
+
+.flex.margin>.three,
+.flex.padding>.three {
+    -webkit-flex-basis: calc(25% - 2em);
+        -ms-flex-preferred-size: calc(25% - 2em);
+            flex-basis: calc(25% - 2em)
+}
+
+.flex.margin>.four,
+.flex.padding>.four {
+    -webkit-flex-basis: calc(33.333333333% - 2em);
+        -ms-flex-preferred-size: calc(33.333333333% - 2em);
+            flex-basis: calc(33.333333333% - 2em)
+}
+
+.flex.margin>.five,
+.flex.padding>.five {
+    -webkit-flex-basis: calc(41.666666667% - 2em);
+        -ms-flex-preferred-size: calc(41.666666667% - 2em);
+            flex-basis: calc(41.666666667% - 2em)
+}
+
+.flex.margin>.six,
+.flex.padding>.six {
+    -webkit-flex-basis: calc(50% - 2em);
+        -ms-flex-preferred-size: calc(50% - 2em);
+            flex-basis: calc(50% - 2em)
+}
+
+.flex.margin>.seven,
+.flex.padding>.seven {
+    -webkit-flex-basis: calc(58.333333333% - 2em);
+        -ms-flex-preferred-size: calc(58.333333333% - 2em);
+            flex-basis: calc(58.333333333% - 2em)
+}
+
+.flex.margin>.eight,
+.flex.padding>.eight {
+    -webkit-flex-basis: calc(66.666666667% - 2em);
+        -ms-flex-preferred-size: calc(66.666666667% - 2em);
+            flex-basis: calc(66.666666667% - 2em)
+}
+
+.flex.margin>.nine,
+.flex.padding>.nine {
+    -webkit-flex-basis: calc(75% - 2em);
+        -ms-flex-preferred-size: calc(75% - 2em);
+            flex-basis: calc(75% - 2em)
+}
+
+.flex.margin>.ten,
+.flex.padding>.ten {
+    -webkit-flex-basis: calc(83.333333333% - 2em);
+        -ms-flex-preferred-size: calc(83.333333333% - 2em);
+            flex-basis: calc(83.333333333% - 2em)
+}
+
+.flex.margin>.eleven,
+.flex.padding>.eleven {
+    -webkit-flex-basis: calc(91.666666667% - 2em);
+        -ms-flex-preferred-size: calc(91.666666667% - 2em);
+            flex-basis: calc(91.666666667% - 2em)
+}
+
+.flex.margin>.twelve,
+.flex.padding>.twelve {
+    -webkit-flex-basis: calc(100% - 2em);
+        -ms-flex-preferred-size: calc(100% - 2em);
+            flex-basis: calc(100% - 2em)
+}
+
+.flex.margin.padding>.one {
+    -webkit-flex-basis: calc(8.333333333% - 4em);
+        -ms-flex-preferred-size: calc(8.333333333% - 4em);
+            flex-basis: calc(8.333333333% - 4em)
+}
+
+.flex.margin.padding>.two {
+    -webkit-flex-basis: calc(16.666666667% - 4em);
+        -ms-flex-preferred-size: calc(16.666666667% - 4em);
+            flex-basis: calc(16.666666667% - 4em)
+}
+
+.flex.margin.padding>.three {
+    -webkit-flex-basis: calc(25% - 4em);
+        -ms-flex-preferred-size: calc(25% - 4em);
+            flex-basis: calc(25% - 4em)
+}
+
+.flex.margin.padding>.four {
+    -webkit-flex-basis: calc(33.333333333% - 4em);
+        -ms-flex-preferred-size: calc(33.333333333% - 4em);
+            flex-basis: calc(33.333333333% - 4em)
+}
+
+.flex.margin.padding>.five {
+    -webkit-flex-basis: calc(41.666666667% - 4em);
+        -ms-flex-preferred-size: calc(41.666666667% - 4em);
+            flex-basis: calc(41.666666667% - 4em)
+}
+
+.flex.margin.padding>.six {
+    -webkit-flex-basis: calc(50% - 4em);
+        -ms-flex-preferred-size: calc(50% - 4em);
+            flex-basis: calc(50% - 4em)
+}
+
+.flex.margin.padding>.seven {
+    -webkit-flex-basis: calc(58.333333333% - 4em);
+        -ms-flex-preferred-size: calc(58.333333333% - 4em);
+            flex-basis: calc(58.333333333% - 4em)
+}
+
+.flex.margin.padding>.eight {
+    -webkit-flex-basis: calc(66.666666667% - 4em);
+        -ms-flex-preferred-size: calc(66.666666667% - 4em);
+            flex-basis: calc(66.666666667% - 4em)
+}
+
+.flex.margin.padding>.nine {
+    -webkit-flex-basis: calc(75% - 4em);
+        -ms-flex-preferred-size: calc(75% - 4em);
+            flex-basis: calc(75% - 4em)
+}
+
+.flex.margin.padding>.ten {
+    -webkit-flex-basis: calc(83.333333333% - 4em);
+        -ms-flex-preferred-size: calc(83.333333333% - 4em);
+            flex-basis: calc(83.333333333% - 4em)
+}
+
+.flex.margin.padding>.eleven {
+    -webkit-flex-basis: calc(91.666666667% - 4em);
+        -ms-flex-preferred-size: calc(91.666666667% - 4em);
+            flex-basis: calc(91.666666667% - 4em)
+}
+
+.flex.margin.padding>.twelve {
+    -webkit-flex-basis: calc(100% - 4em);
+        -ms-flex-preferred-size: calc(100% - 4em);
+            flex-basis: calc(100% - 4em)
+}
+
+.flex>.one {
+    -webkit-flex-basis: 8.333333333%;
+        -ms-flex-preferred-size: 8.333333333%;
+            flex-basis: 8.333333333%
+}
+
+.flex>.two {
+    -webkit-flex-basis: 16.666666667%;
+        -ms-flex-preferred-size: 16.666666667%;
+            flex-basis: 16.666666667%
+}
+
+.flex>.three {
+    -webkit-flex-basis: 25%;
+        -ms-flex-preferred-size: 25%;
+            flex-basis: 25%
+}
+
+.flex>.four {
+    -webkit-flex-basis: 33.333333333%;
+        -ms-flex-preferred-size: 33.333333333%;
+            flex-basis: 33.333333333%
+}
+
+.flex>.five {
+    -webkit-flex-basis: 41.666666667%;
+        -ms-flex-preferred-size: 41.666666667%;
+            flex-basis: 41.666666667%
+}
+
+.flex>.six {
+    -webkit-flex-basis: 50%;
+        -ms-flex-preferred-size: 50%;
+            flex-basis: 50%
+}
+
+.flex>.seven {
+    -webkit-flex-basis: 58.333333333%;
+        -ms-flex-preferred-size: 58.333333333%;
+            flex-basis: 58.333333333%
+}
+
+.flex>.eight {
+    -webkit-flex-basis: 66.666666667%;
+        -ms-flex-preferred-size: 66.666666667%;
+            flex-basis: 66.666666667%
+}
+
+.flex>.nine {
+    -webkit-flex-basis: 75%;
+        -ms-flex-preferred-size: 75%;
+            flex-basis: 75%
+}
+
+.flex>.ten {
+    -webkit-flex-basis: 83.333333333%;
+        -ms-flex-preferred-size: 83.333333333%;
+            flex-basis: 83.333333333%
+}
+
+.flex>.eleven {
+    -webkit-flex-basis: 91.666666667%;
+        -ms-flex-preferred-size: 91.666666667%;
+            flex-basis: 91.666666667%
+}
+
+.flex>.twelve {
+    -webkit-flex-basis: 100%;
+        -ms-flex-preferred-size: 100%;
+            flex-basis: 100%
+}
+
+.flex>.fifth {
+    -webkit-flex-basis: 20%;
+        -ms-flex-preferred-size: 20%;
+            flex-basis: 20%
+}
+
+.flex.margin.padding>.fifth {
+    -webkit-flex-basis: calc(20% - 4em);
+        -ms-flex-preferred-size: calc(20% - 4em);
+            flex-basis: calc(20% - 4em)
+}
+
+.flex.margin>.fifth,
+.flex.padding>.fifth {
+    -webkit-flex-basis: calc(20% - 2em);
+        -ms-flex-preferred-size: calc(20% - 2em);
+            flex-basis: calc(20% - 2em)
+}
+
+@media(max-width:1100px) {
+    .m-align {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex
+    }
+    .m-align.m-center.m-center {
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+            -ms-flex-align: center;
+                align-items: center
+    }
+    .m-align.m-center.m-left {
+        -webkit-box-pack: start;
+        -webkit-justify-content: flex-start;
+            -ms-flex-pack: start;
+                justify-content: flex-start
+    }
+    .m-align.m-center.m-right {
+        -webkit-box-pack: end;
+        -webkit-justify-content: flex-end;
+            -ms-flex-pack: end;
+                justify-content: flex-end
+    }
+    .m-align.m-center.m-space-around {
+        -webkit-justify-content: space-around;
+            -ms-flex-pack: distribute;
+                justify-content: space-around;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: row;
+            -ms-flex-direction: row;
+                flex-direction: row
+    }
+    .m-align.m-center.m-space-between {
+        -webkit-box-pack: justify;
+        -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
+                justify-content: space-between;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: row;
+            -ms-flex-direction: row;
+                flex-direction: row
+    }
+    .flex.margin>.m-one,
+    .flex.padding>.m-one {
+        -webkit-flex-basis: calc(8.333333333% - 2em);
+            -ms-flex-preferred-size: calc(8.333333333% - 2em);
+                flex-basis: calc(8.333333333% - 2em)
+    }
+    .flex.margin>.m-two,
+    .flex.padding>.m-two {
+        -webkit-flex-basis: calc(16.666666667% - 2em);
+            -ms-flex-preferred-size: calc(16.666666667% - 2em);
+                flex-basis: calc(16.666666667% - 2em)
+    }
+    .flex.margin>.m-three,
+    .flex.padding>.m-three {
+        -webkit-flex-basis: calc(25% - 2em);
+            -ms-flex-preferred-size: calc(25% - 2em);
+                flex-basis: calc(25% - 2em)
+    }
+    .flex.margin>.m-four,
+    .flex.padding>.m-four {
+        -webkit-flex-basis: calc(33.333333333% - 2em);
+            -ms-flex-preferred-size: calc(33.333333333% - 2em);
+                flex-basis: calc(33.333333333% - 2em)
+    }
+    .flex.margin>.m-five,
+    .flex.padding>.m-five {
+        -webkit-flex-basis: calc(41.666666667% - 2em);
+            -ms-flex-preferred-size: calc(41.666666667% - 2em);
+                flex-basis: calc(41.666666667% - 2em)
+    }
+    .flex.margin>.m-six,
+    .flex.padding>.m-six {
+        -webkit-flex-basis: calc(50% - 2em);
+            -ms-flex-preferred-size: calc(50% - 2em);
+                flex-basis: calc(50% - 2em)
+    }
+    .flex.margin>.m-seven,
+    .flex.padding>.m-seven {
+        -webkit-flex-basis: calc(58.333333333% - 2em);
+            -ms-flex-preferred-size: calc(58.333333333% - 2em);
+                flex-basis: calc(58.333333333% - 2em)
+    }
+    .flex.margin>.m-eight,
+    .flex.padding>.m-eight {
+        -webkit-flex-basis: calc(66.666666667% - 2em);
+            -ms-flex-preferred-size: calc(66.666666667% - 2em);
+                flex-basis: calc(66.666666667% - 2em)
+    }
+    .flex.margin>.m-nine,
+    .flex.padding>.m-nine {
+        -webkit-flex-basis: calc(75% - 2em);
+            -ms-flex-preferred-size: calc(75% - 2em);
+                flex-basis: calc(75% - 2em)
+    }
+    .flex.margin>.m-ten,
+    .flex.padding>.m-ten {
+        -webkit-flex-basis: calc(83.333333333% - 2em);
+            -ms-flex-preferred-size: calc(83.333333333% - 2em);
+                flex-basis: calc(83.333333333% - 2em)
+    }
+    .flex.margin>.m-eleven,
+    .flex.padding>.m-eleven {
+        -webkit-flex-basis: calc(91.666666667% - 2em);
+            -ms-flex-preferred-size: calc(91.666666667% - 2em);
+                flex-basis: calc(91.666666667% - 2em)
+    }
+    .flex.margin>.m-twelve,
+    .flex.padding>.m-twelve {
+        -webkit-flex-basis: calc(100% - 2em);
+            -ms-flex-preferred-size: calc(100% - 2em);
+                flex-basis: calc(100% - 2em)
+    }
+    .flex.margin.padding>.m-one {
+        -webkit-flex-basis: calc(8.333333333% - 4em);
+            -ms-flex-preferred-size: calc(8.333333333% - 4em);
+                flex-basis: calc(8.333333333% - 4em)
+    }
+    .flex.margin.padding>.m-two {
+        -webkit-flex-basis: calc(16.666666667% - 4em);
+            -ms-flex-preferred-size: calc(16.666666667% - 4em);
+                flex-basis: calc(16.666666667% - 4em)
+    }
+    .flex.margin.padding>.m-three {
+        -webkit-flex-basis: calc(25% - 4em);
+            -ms-flex-preferred-size: calc(25% - 4em);
+                flex-basis: calc(25% - 4em)
+    }
+    .flex.margin.padding>.m-four {
+        -webkit-flex-basis: calc(33.333333333% - 4em);
+            -ms-flex-preferred-size: calc(33.333333333% - 4em);
+                flex-basis: calc(33.333333333% - 4em)
+    }
+    .flex.margin.padding>.m-five {
+        -webkit-flex-basis: calc(41.666666667% - 4em);
+            -ms-flex-preferred-size: calc(41.666666667% - 4em);
+                flex-basis: calc(41.666666667% - 4em)
+    }
+    .flex.margin.padding>.m-six {
+        -webkit-flex-basis: calc(50% - 4em);
+            -ms-flex-preferred-size: calc(50% - 4em);
+                flex-basis: calc(50% - 4em)
+    }
+    .flex.margin.padding>.m-seven {
+        -webkit-flex-basis: calc(58.333333333% - 4em);
+            -ms-flex-preferred-size: calc(58.333333333% - 4em);
+                flex-basis: calc(58.333333333% - 4em)
+    }
+    .flex.margin.padding>.m-eight {
+        -webkit-flex-basis: calc(66.666666667% - 4em);
+            -ms-flex-preferred-size: calc(66.666666667% - 4em);
+                flex-basis: calc(66.666666667% - 4em)
+    }
+    .flex.margin.padding>.m-nine {
+        -webkit-flex-basis: calc(75% - 4em);
+            -ms-flex-preferred-size: calc(75% - 4em);
+                flex-basis: calc(75% - 4em)
+    }
+    .flex.margin.padding>.m-ten {
+        -webkit-flex-basis: calc(83.333333333% - 4em);
+            -ms-flex-preferred-size: calc(83.333333333% - 4em);
+                flex-basis: calc(83.333333333% - 4em)
+    }
+    .flex.margin.padding>.m-eleven {
+        -webkit-flex-basis: calc(91.666666667% - 4em);
+            -ms-flex-preferred-size: calc(91.666666667% - 4em);
+                flex-basis: calc(91.666666667% - 4em)
+    }
+    .flex.margin.padding>.m-twelve {
+        -webkit-flex-basis: calc(100% - 4em);
+            -ms-flex-preferred-size: calc(100% - 4em);
+                flex-basis: calc(100% - 4em)
+    }
+    .flex>.m-one {
+        -webkit-flex-basis: 8.333333333%;
+            -ms-flex-preferred-size: 8.333333333%;
+                flex-basis: 8.333333333%
+    }
+    .flex>.m-two {
+        -webkit-flex-basis: 16.666666667%;
+            -ms-flex-preferred-size: 16.666666667%;
+                flex-basis: 16.666666667%
+    }
+    .flex>.m-three {
+        -webkit-flex-basis: 25%;
+            -ms-flex-preferred-size: 25%;
+                flex-basis: 25%
+    }
+    .flex>.m-four {
+        -webkit-flex-basis: 33.333333333%;
+            -ms-flex-preferred-size: 33.333333333%;
+                flex-basis: 33.333333333%
+    }
+    .flex>.m-five {
+        -webkit-flex-basis: 41.666666667%;
+            -ms-flex-preferred-size: 41.666666667%;
+                flex-basis: 41.666666667%
+    }
+    .flex>.m-six {
+        -webkit-flex-basis: 50%;
+            -ms-flex-preferred-size: 50%;
+                flex-basis: 50%
+    }
+    .flex>.m-seven {
+        -webkit-flex-basis: 58.333333333%;
+            -ms-flex-preferred-size: 58.333333333%;
+                flex-basis: 58.333333333%
+    }
+    .flex>.m-eight {
+        -webkit-flex-basis: 66.666666667%;
+            -ms-flex-preferred-size: 66.666666667%;
+                flex-basis: 66.666666667%
+    }
+    .flex>.m-nine {
+        -webkit-flex-basis: 75%;
+            -ms-flex-preferred-size: 75%;
+                flex-basis: 75%
+    }
+    .flex>.m-ten {
+        -webkit-flex-basis: 83.333333333%;
+            -ms-flex-preferred-size: 83.333333333%;
+                flex-basis: 83.333333333%
+    }
+    .flex>.m-eleven {
+        -webkit-flex-basis: 91.666666667%;
+            -ms-flex-preferred-size: 91.666666667%;
+                flex-basis: 91.666666667%
+    }
+    .flex>.m-twelve {
+        -webkit-flex-basis: 100%;
+            -ms-flex-preferred-size: 100%;
+                flex-basis: 100%
+    }
+    .flex>.m-fifth {
+        -webkit-flex-basis: 20%;
+            -ms-flex-preferred-size: 20%;
+                flex-basis: 20%
+    }
+    .flex.margin.padding>.m-fifth {
+        -webkit-flex-basis: calc(20% - 4em);
+            -ms-flex-preferred-size: calc(20% - 4em);
+                flex-basis: calc(20% - 4em)
+    }
+    .flex.margin>.m-fifth,
+    .flex.padding>.m-fifth {
+        -webkit-flex-basis: calc(20% - 2em);
+            -ms-flex-preferred-size: calc(20% - 2em);
+                flex-basis: calc(20% - 2em)
+    }
+}
+
+@media(max-width:800px) {
+    .s-align {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex
+    }
+    .s-align.s-center.s-center {
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+            -ms-flex-align: center;
+                align-items: center
+    }
+    .s-align.s-center.s-left {
+        -webkit-box-pack: start;
+        -webkit-justify-content: flex-start;
+            -ms-flex-pack: start;
+                justify-content: flex-start
+    }
+    .s-align.s-center.s-right {
+        -webkit-box-pack: end;
+        -webkit-justify-content: flex-end;
+            -ms-flex-pack: end;
+                justify-content: flex-end
+    }
+    .s-align.s-center.s-space-around {
+        -webkit-justify-content: space-around;
+            -ms-flex-pack: distribute;
+                justify-content: space-around;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: row;
+            -ms-flex-direction: row;
+                flex-direction: row
+    }
+    .s-align.s-center.s-space-between {
+        -webkit-box-pack: justify;
+        -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
+                justify-content: space-between;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: row;
+            -ms-flex-direction: row;
+                flex-direction: row
+    }
+    .flex.margin>.s-one,
+    .flex.padding>.s-one {
+        -webkit-flex-basis: calc(8.333333333% - 2em);
+            -ms-flex-preferred-size: calc(8.333333333% - 2em);
+                flex-basis: calc(8.333333333% - 2em)
+    }
+    .flex.margin>.s-two,
+    .flex.padding>.s-two {
+        -webkit-flex-basis: calc(16.666666667% - 2em);
+            -ms-flex-preferred-size: calc(16.666666667% - 2em);
+                flex-basis: calc(16.666666667% - 2em)
+    }
+    .flex.margin>.s-three,
+    .flex.padding>.s-three {
+        -webkit-flex-basis: calc(25% - 2em);
+            -ms-flex-preferred-size: calc(25% - 2em);
+                flex-basis: calc(25% - 2em)
+    }
+    .flex.margin>.s-four,
+    .flex.padding>.s-four {
+        -webkit-flex-basis: calc(33.333333333% - 2em);
+            -ms-flex-preferred-size: calc(33.333333333% - 2em);
+                flex-basis: calc(33.333333333% - 2em)
+    }
+    .flex.margin>.s-five,
+    .flex.padding>.s-five {
+        -webkit-flex-basis: calc(41.666666667% - 2em);
+            -ms-flex-preferred-size: calc(41.666666667% - 2em);
+                flex-basis: calc(41.666666667% - 2em)
+    }
+    .flex.margin>.s-six,
+    .flex.padding>.s-six {
+        -webkit-flex-basis: calc(50% - 2em);
+            -ms-flex-preferred-size: calc(50% - 2em);
+                flex-basis: calc(50% - 2em)
+    }
+    .flex.margin>.s-seven,
+    .flex.padding>.s-seven {
+        -webkit-flex-basis: calc(58.333333333% - 2em);
+            -ms-flex-preferred-size: calc(58.333333333% - 2em);
+                flex-basis: calc(58.333333333% - 2em)
+    }
+    .flex.margin>.s-eight,
+    .flex.padding>.s-eight {
+        -webkit-flex-basis: calc(66.666666667% - 2em);
+            -ms-flex-preferred-size: calc(66.666666667% - 2em);
+                flex-basis: calc(66.666666667% - 2em)
+    }
+    .flex.margin>.s-nine,
+    .flex.padding>.s-nine {
+        -webkit-flex-basis: calc(75% - 2em);
+            -ms-flex-preferred-size: calc(75% - 2em);
+                flex-basis: calc(75% - 2em)
+    }
+    .flex.margin>.s-ten,
+    .flex.padding>.s-ten {
+        -webkit-flex-basis: calc(83.333333333% - 2em);
+            -ms-flex-preferred-size: calc(83.333333333% - 2em);
+                flex-basis: calc(83.333333333% - 2em)
+    }
+    .flex.margin>.s-eleven,
+    .flex.padding>.s-eleven {
+        -webkit-flex-basis: calc(91.666666667% - 2em);
+            -ms-flex-preferred-size: calc(91.666666667% - 2em);
+                flex-basis: calc(91.666666667% - 2em)
+    }
+    .flex.margin>.s-twelve,
+    .flex.padding>.s-twelve {
+        -webkit-flex-basis: calc(100% - 2em);
+            -ms-flex-preferred-size: calc(100% - 2em);
+                flex-basis: calc(100% - 2em)
+    }
+    .flex.margin.padding>.s-one {
+        -webkit-flex-basis: calc(8.333333333% - 4em);
+            -ms-flex-preferred-size: calc(8.333333333% - 4em);
+                flex-basis: calc(8.333333333% - 4em)
+    }
+    .flex.margin.padding>.s-two {
+        -webkit-flex-basis: calc(16.666666667% - 4em);
+            -ms-flex-preferred-size: calc(16.666666667% - 4em);
+                flex-basis: calc(16.666666667% - 4em)
+    }
+    .flex.margin.padding>.s-three {
+        -webkit-flex-basis: calc(25% - 4em);
+            -ms-flex-preferred-size: calc(25% - 4em);
+                flex-basis: calc(25% - 4em)
+    }
+    .flex.margin.padding>.s-four {
+        -webkit-flex-basis: calc(33.333333333% - 4em);
+            -ms-flex-preferred-size: calc(33.333333333% - 4em);
+                flex-basis: calc(33.333333333% - 4em)
+    }
+    .flex.margin.padding>.s-five {
+        -webkit-flex-basis: calc(41.666666667% - 4em);
+            -ms-flex-preferred-size: calc(41.666666667% - 4em);
+                flex-basis: calc(41.666666667% - 4em)
+    }
+    .flex.margin.padding>.s-six {
+        -webkit-flex-basis: calc(50% - 4em);
+            -ms-flex-preferred-size: calc(50% - 4em);
+                flex-basis: calc(50% - 4em)
+    }
+    .flex.margin.padding>.s-seven {
+        -webkit-flex-basis: calc(58.333333333% - 4em);
+            -ms-flex-preferred-size: calc(58.333333333% - 4em);
+                flex-basis: calc(58.333333333% - 4em)
+    }
+    .flex.margin.padding>.s-eight {
+        -webkit-flex-basis: calc(66.666666667% - 4em);
+            -ms-flex-preferred-size: calc(66.666666667% - 4em);
+                flex-basis: calc(66.666666667% - 4em)
+    }
+    .flex.margin.padding>.s-nine {
+        -webkit-flex-basis: calc(75% - 4em);
+            -ms-flex-preferred-size: calc(75% - 4em);
+                flex-basis: calc(75% - 4em)
+    }
+    .flex.margin.padding>.s-ten {
+        -webkit-flex-basis: calc(83.333333333% - 4em);
+            -ms-flex-preferred-size: calc(83.333333333% - 4em);
+                flex-basis: calc(83.333333333% - 4em)
+    }
+    .flex.margin.padding>.s-eleven {
+        -webkit-flex-basis: calc(91.666666667% - 4em);
+            -ms-flex-preferred-size: calc(91.666666667% - 4em);
+                flex-basis: calc(91.666666667% - 4em)
+    }
+    .flex.margin.padding>.s-twelve {
+        -webkit-flex-basis: calc(100% - 4em);
+            -ms-flex-preferred-size: calc(100% - 4em);
+                flex-basis: calc(100% - 4em)
+    }
+    .flex>.s-one {
+        -webkit-flex-basis: 8.333333333%;
+            -ms-flex-preferred-size: 8.333333333%;
+                flex-basis: 8.333333333%
+    }
+    .flex>.s-two {
+        -webkit-flex-basis: 16.666666667%;
+            -ms-flex-preferred-size: 16.666666667%;
+                flex-basis: 16.666666667%
+    }
+    .flex>.s-three {
+        -webkit-flex-basis: 25%;
+            -ms-flex-preferred-size: 25%;
+                flex-basis: 25%
+    }
+    .flex>.s-four {
+        -webkit-flex-basis: 33.333333333%;
+            -ms-flex-preferred-size: 33.333333333%;
+                flex-basis: 33.333333333%
+    }
+    .flex>.s-five {
+        -webkit-flex-basis: 41.666666667%;
+            -ms-flex-preferred-size: 41.666666667%;
+                flex-basis: 41.666666667%
+    }
+    .flex>.s-six {
+        -webkit-flex-basis: 50%;
+            -ms-flex-preferred-size: 50%;
+                flex-basis: 50%
+    }
+    .flex>.s-seven {
+        -webkit-flex-basis: 58.333333333%;
+            -ms-flex-preferred-size: 58.333333333%;
+                flex-basis: 58.333333333%
+    }
+    .flex>.s-eight {
+        -webkit-flex-basis: 66.666666667%;
+            -ms-flex-preferred-size: 66.666666667%;
+                flex-basis: 66.666666667%
+    }
+    .flex>.s-nine {
+        -webkit-flex-basis: 75%;
+            -ms-flex-preferred-size: 75%;
+                flex-basis: 75%
+    }
+    .flex>.s-ten {
+        -webkit-flex-basis: 83.333333333%;
+            -ms-flex-preferred-size: 83.333333333%;
+                flex-basis: 83.333333333%
+    }
+    .flex>.s-eleven {
+        -webkit-flex-basis: 91.666666667%;
+            -ms-flex-preferred-size: 91.666666667%;
+                flex-basis: 91.666666667%
+    }
+    .flex>.s-twelve {
+        -webkit-flex-basis: 100%;
+            -ms-flex-preferred-size: 100%;
+                flex-basis: 100%
+    }
+    .flex>.s-fifth {
+        -webkit-flex-basis: 20%;
+            -ms-flex-preferred-size: 20%;
+                flex-basis: 20%
+    }
+    .flex.margin.padding>.s-fifth {
+        -webkit-flex-basis: calc(20% - 4em);
+            -ms-flex-preferred-size: calc(20% - 4em);
+                flex-basis: calc(20% - 4em)
+    }
+    .flex.margin>.s-fifth,
+    .flex.padding>.s-fifth {
+        -webkit-flex-basis: calc(20% - 2em);
+            -ms-flex-preferred-size: calc(20% - 2em);
+                flex-basis: calc(20% - 2em)
+    }
+}
+
+@media(max-width:550px) {
+    .xs-align {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex
+    }
+    .xs-align.xs-center.xs-center {
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+            -ms-flex-pack: center;
+                justify-content: center;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+            -ms-flex-align: center;
+                align-items: center
+    }
+    .xs-align.xs-center.xs-left {
+        -webkit-box-pack: start;
+        -webkit-justify-content: flex-start;
+            -ms-flex-pack: start;
+                justify-content: flex-start
+    }
+    .xs-align.xs-center.xs-right {
+        -webkit-box-pack: end;
+        -webkit-justify-content: flex-end;
+            -ms-flex-pack: end;
+                justify-content: flex-end
+    }
+    .xs-align.xs-center.xs-space-around {
+        -webkit-justify-content: space-around;
+            -ms-flex-pack: distribute;
+                justify-content: space-around;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: row;
+            -ms-flex-direction: row;
+                flex-direction: row
+    }
+    .xs-align.xs-center.xs-space-between {
+        -webkit-box-pack: justify;
+        -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
+                justify-content: space-between;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: row;
+            -ms-flex-direction: row;
+                flex-direction: row
+    }
+    .flex.margin>.xs-one,
+    .flex.padding>.xs-one {
+        -webkit-flex-basis: calc(8.333333333% - 2em);
+            -ms-flex-preferred-size: calc(8.333333333% - 2em);
+                flex-basis: calc(8.333333333% - 2em)
+    }
+    .flex.margin>.xs-two,
+    .flex.padding>.xs-two {
+        -webkit-flex-basis: calc(16.666666667% - 2em);
+            -ms-flex-preferred-size: calc(16.666666667% - 2em);
+                flex-basis: calc(16.666666667% - 2em)
+    }
+    .flex.margin>.xs-three,
+    .flex.padding>.xs-three {
+        -webkit-flex-basis: calc(25% - 2em);
+            -ms-flex-preferred-size: calc(25% - 2em);
+                flex-basis: calc(25% - 2em)
+    }
+    .flex.margin>.xs-four,
+    .flex.padding>.xs-four {
+        -webkit-flex-basis: calc(33.333333333% - 2em);
+            -ms-flex-preferred-size: calc(33.333333333% - 2em);
+                flex-basis: calc(33.333333333% - 2em)
+    }
+    .flex.margin>.xs-five,
+    .flex.padding>.xs-five {
+        -webkit-flex-basis: calc(41.666666667% - 2em);
+            -ms-flex-preferred-size: calc(41.666666667% - 2em);
+                flex-basis: calc(41.666666667% - 2em)
+    }
+    .flex.margin>.xs-six,
+    .flex.padding>.xs-six {
+        -webkit-flex-basis: calc(50% - 2em);
+            -ms-flex-preferred-size: calc(50% - 2em);
+                flex-basis: calc(50% - 2em)
+    }
+    .flex.margin>.xs-seven,
+    .flex.padding>.xs-seven {
+        -webkit-flex-basis: calc(58.333333333% - 2em);
+            -ms-flex-preferred-size: calc(58.333333333% - 2em);
+                flex-basis: calc(58.333333333% - 2em)
+    }
+    .flex.margin>.xs-eight,
+    .flex.padding>.xs-eight {
+        -webkit-flex-basis: calc(66.666666667% - 2em);
+            -ms-flex-preferred-size: calc(66.666666667% - 2em);
+                flex-basis: calc(66.666666667% - 2em)
+    }
+    .flex.margin>.xs-nine,
+    .flex.padding>.xs-nine {
+        -webkit-flex-basis: calc(75% - 2em);
+            -ms-flex-preferred-size: calc(75% - 2em);
+                flex-basis: calc(75% - 2em)
+    }
+    .flex.margin>.xs-ten,
+    .flex.padding>.xs-ten {
+        -webkit-flex-basis: calc(83.333333333% - 2em);
+            -ms-flex-preferred-size: calc(83.333333333% - 2em);
+                flex-basis: calc(83.333333333% - 2em)
+    }
+    .flex.margin>.xs-eleven,
+    .flex.padding>.xs-eleven {
+        -webkit-flex-basis: calc(91.666666667% - 2em);
+            -ms-flex-preferred-size: calc(91.666666667% - 2em);
+                flex-basis: calc(91.666666667% - 2em)
+    }
+    .flex.margin>.xs-twelve,
+    .flex.padding>.xs-twelve {
+        -webkit-flex-basis: calc(100% - 2em);
+            -ms-flex-preferred-size: calc(100% - 2em);
+                flex-basis: calc(100% - 2em)
+    }
+    .flex.margin.padding>.xs-one {
+        -webkit-flex-basis: calc(8.333333333% - 4em);
+            -ms-flex-preferred-size: calc(8.333333333% - 4em);
+                flex-basis: calc(8.333333333% - 4em)
+    }
+    .flex.margin.padding>.xs-two {
+        -webkit-flex-basis: calc(16.666666667% - 4em);
+            -ms-flex-preferred-size: calc(16.666666667% - 4em);
+                flex-basis: calc(16.666666667% - 4em)
+    }
+    .flex.margin.padding>.xs-three {
+        -webkit-flex-basis: calc(25% - 4em);
+            -ms-flex-preferred-size: calc(25% - 4em);
+                flex-basis: calc(25% - 4em)
+    }
+    .flex.margin.padding>.xs-four {
+        -webkit-flex-basis: calc(33.333333333% - 4em);
+            -ms-flex-preferred-size: calc(33.333333333% - 4em);
+                flex-basis: calc(33.333333333% - 4em)
+    }
+    .flex.margin.padding>.xs-five {
+        -webkit-flex-basis: calc(41.666666667% - 4em);
+            -ms-flex-preferred-size: calc(41.666666667% - 4em);
+                flex-basis: calc(41.666666667% - 4em)
+    }
+    .flex.margin.padding>.xs-six {
+        -webkit-flex-basis: calc(50% - 4em);
+            -ms-flex-preferred-size: calc(50% - 4em);
+                flex-basis: calc(50% - 4em)
+    }
+    .flex.margin.padding>.xs-seven {
+        -webkit-flex-basis: calc(58.333333333% - 4em);
+            -ms-flex-preferred-size: calc(58.333333333% - 4em);
+                flex-basis: calc(58.333333333% - 4em)
+    }
+    .flex.margin.padding>.xs-eight {
+        -webkit-flex-basis: calc(66.666666667% - 4em);
+            -ms-flex-preferred-size: calc(66.666666667% - 4em);
+                flex-basis: calc(66.666666667% - 4em)
+    }
+    .flex.margin.padding>.xs-nine {
+        -webkit-flex-basis: calc(75% - 4em);
+            -ms-flex-preferred-size: calc(75% - 4em);
+                flex-basis: calc(75% - 4em)
+    }
+    .flex.margin.padding>.xs-ten {
+        -webkit-flex-basis: calc(83.333333333% - 4em);
+            -ms-flex-preferred-size: calc(83.333333333% - 4em);
+                flex-basis: calc(83.333333333% - 4em)
+    }
+    .flex.margin.padding>.xs-eleven {
+        -webkit-flex-basis: calc(91.666666667% - 4em);
+            -ms-flex-preferred-size: calc(91.666666667% - 4em);
+                flex-basis: calc(91.666666667% - 4em)
+    }
+    .flex.margin.padding>.xs-twelve {
+        -webkit-flex-basis: calc(100% - 4em);
+            -ms-flex-preferred-size: calc(100% - 4em);
+                flex-basis: calc(100% - 4em)
+    }
+    .flex>.xs-one {
+        -webkit-flex-basis: 8.333333333%;
+            -ms-flex-preferred-size: 8.333333333%;
+                flex-basis: 8.333333333%
+    }
+    .flex>.xs-two {
+        -webkit-flex-basis: 16.666666667%;
+            -ms-flex-preferred-size: 16.666666667%;
+                flex-basis: 16.666666667%
+    }
+    .flex>.xs-three {
+        -webkit-flex-basis: 25%;
+            -ms-flex-preferred-size: 25%;
+                flex-basis: 25%
+    }
+    .flex>.xs-four {
+        -webkit-flex-basis: 33.333333333%;
+            -ms-flex-preferred-size: 33.333333333%;
+                flex-basis: 33.333333333%
+    }
+    .flex>.xs-five {
+        -webkit-flex-basis: 41.666666667%;
+            -ms-flex-preferred-size: 41.666666667%;
+                flex-basis: 41.666666667%
+    }
+    .flex>.xs-six {
+        -webkit-flex-basis: 50%;
+            -ms-flex-preferred-size: 50%;
+                flex-basis: 50%
+    }
+    .flex>.xs-seven {
+        -webkit-flex-basis: 58.333333333%;
+            -ms-flex-preferred-size: 58.333333333%;
+                flex-basis: 58.333333333%
+    }
+    .flex>.xs-eight {
+        -webkit-flex-basis: 66.666666667%;
+            -ms-flex-preferred-size: 66.666666667%;
+                flex-basis: 66.666666667%
+    }
+    .flex>.xs-nine {
+        -webkit-flex-basis: 75%;
+            -ms-flex-preferred-size: 75%;
+                flex-basis: 75%
+    }
+    .flex>.xs-ten {
+        -webkit-flex-basis: 83.333333333%;
+            -ms-flex-preferred-size: 83.333333333%;
+                flex-basis: 83.333333333%
+    }
+    .flex>.xs-eleven {
+        -webkit-flex-basis: 91.666666667%;
+            -ms-flex-preferred-size: 91.666666667%;
+                flex-basis: 91.666666667%
+    }
+    .flex>.xs-twelve {
+        -webkit-flex-basis: 100%;
+            -ms-flex-preferred-size: 100%;
+                flex-basis: 100%
+    }
+    .flex>.xs-fifth {
+        -webkit-flex-basis: 20%;
+            -ms-flex-preferred-size: 20%;
+                flex-basis: 20%
+    }
+    .flex.margin.padding>.xs-fifth {
+        -webkit-flex-basis: calc(20% - 4em);
+            -ms-flex-preferred-size: calc(20% - 4em);
+                flex-basis: calc(20% - 4em)
+    }
+    .flex.margin>.xs-fifth,
+    .flex.padding>.xs-fifth {
+        -webkit-flex-basis: calc(20% - 2em);
+            -ms-flex-preferred-size: calc(20% - 2em);
+                flex-basis: calc(20% - 2em)
+    }
+}
