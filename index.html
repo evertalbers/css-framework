@@ -10,24 +10,43 @@
     <link rel="stylesheet" href="framework.pkgd.css">
     <link rel="stylesheet" href="custom.css">
     <style>
-        #grid + button + button + .flex>*, #aligners + div>* {
+        #grid + p  + button + button+ .flex>*,
+        #aligners + div>* {
             background: #eee;
             text-align: center
         }
+        dl{
+            max-width: 500px;
+            display: inline-block;
+        }
+        code{background: #eee;}
+
         
-        #grid + button + button + .flex>*:after {
+        #grid + p + button + button + .flex>*:after {
             content: attr(class)
         }
-        #aligners + div>*{
+        
+        #aligners + div>* {
             height: 8em;
         }
-        body>*,body,#examples>h2{
-            text-align:center;
+        #aligners + div .twelve{
+            height: 24em;
         }
-        body>*>*{
+        #aligners + div p{
+            width: 300px;
+        }
+        body>*,
+        body,
+        #examples>h2 {
+            text-align: center;
+        }
+        
+        body>*>* {
             text-align: left;
         }
-        #examples>h2, body>h1{
+        
+        #examples>h2,
+        body>h1 {
             border-bottom: 3px solid;
         }
     </style>
@@ -66,6 +85,8 @@
         </div>
     </header>
     <h1 id="grid">Grid</h1>
+    <p>The base grid is constructed with a container with the class <code>flex</code>, which then contains columns with classes <code>one</code> through <code>twelve</code></p>
+
     <button class="toggle-margin">Toggle margin class on grid</button>
     <button class="toggle-padding">Toggle padding class on grid</button>
     <div class="flex padding margin">
@@ -115,6 +136,31 @@
         <div class="eleven"></div>
         <div class="one"></div>
     </div>
+    <p>There are a few aditional classes in the grid, these are:</p>
+    <dl>
+        <dt><code>margin</code></dt>
+      <dd>Give all columns a margin of 1em</dd>
+        <dt><code>padding</code></dt>
+      <dd>Give all columns a padding of 1em</dd>
+        <dt><code>col</code></dt>
+      <dd>Switch the grid to vertical layout, see the <a href="#aligned-columns">Aligned equal columns</a> example.</dd>
+    </dl>
+    <p>And these can be used on the columns themselves:</p>
+    <dl>
+        <dt><code>no-grow</code></dt>
+      <dd>The element will not grow to fill available space</dd>
+        <dt><code>no-shrink</code></dt>
+      <dd>the element will not reliquish space to allow other elements to grow</dd>
+    </dl>
+    <p>All flex and aligner related classes have three breakpoints which are used with prefixes:</p>
+    <dl>
+        <dt><code>.m-</code></dt>
+      <dd>Breakpoint at 1100px, example: <code>.m-six</code></dd>
+        <dt><code>.s-</code></dt>
+      <dd>Breakpoint at 800px, example: <code>.s-six</code></dd>
+        <dt><code>.xs-</code></dt>
+      <dd>Breakpoint at 500px, example: <code>.xs-six</code></dd>
+    </dl>
     <h1 id="aligners">Aligners</h1>
     <div class="flex margin padding">
         <div class="four align top left">align top left</div>
@@ -126,7 +172,9 @@
         <div class="four align bottom left">align bottom left</div>
         <div class="four align bottom center">align bottom center</div>
         <div class="four align bottom right">align bottom right</div>
+        <div class="twelve align bottom right m-center s-top s-left"><p>Since the aligners have the same breakpoints as the grid you can easily move the content at different screensizes. This text will start on the bottom right, and move to center and then to top left as window size changes. The classes for this are <code>align bottom right m-center s-top s-left</code></p></div>
     </div>
+    <p></p>
     <h1 id="styling">General styling</h1>
     <div class="container">
         <h1>This is &lt;h1&gt;</h1>
@@ -216,21 +264,24 @@
         <h2 id="aligned-columns">Example: Equal colums with aligned footer:</h2>
         <div class="flex margin padding">
             <div class="four m-six s-twelve flex margin col">
-                <h2 class="no-grow align center">Damn that dog</h2>
+                <div class="no-grow align center">
+                    <h2 class="no-grow align center">Damn that dog</h2></div>
                 <p>Damn that dog . Curl into a furry donut chirp at birds and knock dish off table head butt cant eat out of my own dish steal the warm chair right after you get up so lick arm hair curl into a furry donut. Behind the couch knock over christmas tree i am the best mew, yet eat prawns daintily with a claw then lick paws clean wash down prawns with a lap of carnation milk then retire to the warmest spot on the couch to claw at the fabric before taking a catnap but present belly, scratch hand when stroked. Bathe private parts with tongue then lick owner's face run in circles. Use lap as chair spread kitty litter all over house yet burrow under covers all of a sudden cat goes crazy fall over dead (not really but gets sypathy), so loves cheeseburgers but make meme, make cute face. Unwrap toilet paper meow pee in the shoe. Stare at the wall, play with food and get confused by dust stare at the wall, play with food and get confused by dust, chase imaginary bugs, so poop on grasses give attitude, or chase laser pelt around the house and up and down stairs chasing phantoms. Play time. </p>
                 <div class="no-grow align center">
                     <a href="#" class="button">Read more...</a>
                 </div>
             </div>
             <div class="four m-six s-twelve flex margin col">
-                <h2 class="no-grow align center">percolator seasonal</h2>
+                <div class="no-grow align center">
+                    <h2>percolator seasonal</h2></div>
                 <p>Eu strong spoon percolator seasonal so grounds lungo medium espresso galão. Sweet redeye instant caramelization beans brewed aftertaste rich. Crema froth, foam extra, beans, doppio, frappuccino americano viennese organic extraction. Cultivar coffee extra percolator cultivar grounds medium that galão. And, id, aftertaste, breve, whipped macchiato aromatic americano ristretto. White plunger pot pumpkin spice, qui eu, sweet, and aroma sugar chicory carajillo variety.</p>
                 <div class="no-grow align center">
                     <a href="#" class="button">Read more...</a>
                 </div>
             </div>
             <div class="four m-six s-twelve flex margin col">
-                <h2 class="no-grow align center">rump swine</h2>
+                <div class="no-grow align center">
+                    <h2 class="no-grow align center">rump swine</h2></div>
                 <p>Bacon ipsum dolor amet rump swine pastrami shankle. Boudin frankfurter capicola, jowl meatball beef bresaola ground round kevin brisket picanha chuck. Leberkas turkey ball tip kielbasa swine drumstick biltong doner beef ribs pork belly cow kevin turducken frankfurter. Brisket capicola rump jowl chicken cow tri-tip turkey. Pork loin corned beef jerky leberkas chicken tail pork chop pork belly ground round shankle bacon hamburger landjaeger kevin. Tenderloin leberkas ribeye chicken pancetta brisket picanha, porchetta short loin meatloaf kevin tail turkey strip steak jowl. Jerky sausage spare ribs, ball tip biltong beef tongue fatback short loin boudin leberkas strip steak cow..</p>
                 <div class="no-grow align center">
                     <a href="#" class="button">Read more...</a>
