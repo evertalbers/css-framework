@@ -1,0 +1,17 @@
+{
+  "name": "css-framework-postcss",
+  "version": "1.0.0",
+  "description": "testing",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "autoprefixer": "^6.0.3",
+    "cssnano": "^3.3.1",
+    "postcss": "^5.0.10",
+    "postcss-css-variables": "^0.5.1"
+  }
+}
