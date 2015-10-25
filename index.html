@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="framework.pkgd.css">
     <link rel="stylesheet" href="custom.css">
     <style>
-        .example > *, code {
+        .example div, code {
             background: #eee;
             text-align: center
         }
@@ -24,17 +24,17 @@
             margin: 0 auto;
         }
         
-        #grid + p + button + button + .flex>*:after {
+        .example:first-of-type div:after {
             content: attr(class)
         }
         
-        #aligners + div>* {
+        .example .align {
             height: 8em;
         }
-        #aligners + div .twelve{
-            height: 24em;
+        .example .align.twelve{
+            height: 30em;
         }
-        #aligners + div p{
+        .example .align.twelve p{
             width: 300px;
         }
         body>*,
