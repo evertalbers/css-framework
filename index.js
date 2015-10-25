@@ -5,7 +5,11 @@ var cssnano = require('cssnano');
 
 var fs = require('fs');
 
-var css = fs.readFileSync('framework.css', 'utf8');
+var css = "";
+css += fs.readFileSync('source/normalize.css', 'utf8');
+css += fs.readFileSync('source/grid.css', 'utf8');
+css += fs.readFileSync('source/menu.css', 'utf8');
+css += fs.readFileSync('source/style.css', 'utf8');
 
 var output = postcss([
     cssvariables({variables: {}}),
@@ -16,6 +20,6 @@ var output = postcss([
     to: 'framework.pkgd.css',
     map: { inline: false }
 }).then(function (result) {
-    fs.writeFileSync('framework.pkgd.css', result.css);
-    fs.writeFileSync('framework.pkgd.css.map', result.map);
+    fs.writeFileSync('dist/framework.pkgd.css', result.css);
+    fs.writeFileSync('dist/framework.pkgd.css.map', result.map);
 });

@@ -7,8 +7,8 @@
     <title>Flex grid</title>
     <meta name="description" content="Flex grid documentation">
     <link href='https://fonts.googleapis.com/css?family=Montserrat:700|Open+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="framework.pkgd.css">
-    <link rel="stylesheet" href="custom.css">
+    <link rel="stylesheet" href="dist/framework.pkgd.css">
+    <link rel="stylesheet" href="dist/custom.css">
     <style>
         .example div,
         code {
@@ -375,6 +375,17 @@ document.querySelector("#menu-icon").addEventListener("click", function () {
         </div>
     </div>
     <script src="custom.js"></script>
+    <script>
+        document.querySelector(".toggle-margin").addEventListener("click", function () {
+            document.querySelector(".example:first-of-type").classList.toggle("margin");
+        });
+        document.querySelector(".toggle-padding").addEventListener("click", function () {
+            document.querySelector(".example:first-of-type").classList.toggle("padding");
+        });
+        document.querySelector(".toggle-fixed").addEventListener("click", function () {
+            document.querySelector("body").classList.toggle("fixed");
+        });
+    </script>
 </body>
 
 </html>
