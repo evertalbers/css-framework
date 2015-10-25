@@ -345,7 +345,7 @@ document.querySelector("#menu-icon").addEventListener("click", function () {
         <br>Safari 8, 9
         <br>Latest Chrome
         <br>Latest Firefox</p>
-    <p>I am also working on IE10 compatability, but it is not quite there yet.</p>
+    <p>IE10 support is not possible due to <a href="https://github.com/philipwalton/flexbugs#8-flex-basis-doesnt-support-calc">IE10 not supporting calc() in flex basis</a>. I will be offering an alternate grid with percentage margins/paddings shortly.</p>
     <div id="examples">
         <h2 id="aligned-columns">Example: Equal colums with aligned footer:</h2>
         <div class="flex margin padding">
