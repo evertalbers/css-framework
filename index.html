@@ -10,17 +10,32 @@
     <link rel="stylesheet" href="framework.pkgd.css">
     <link rel="stylesheet" href="custom.css">
     <style>
-        .example div, code {
+        .example div,
+        code {
             background: #eee;
             text-align: center
         }
-        dl, pre{
+        
+        code {
+            display: inline;
+            padding: 0 5px;
+            background: #E0E0E0;
+        }
+        
+        code::before,
+        code::after {
+            content: '"';
+        }
+        
+        dl,
+        pre {
             max-width: 500px;
             display: inline-block;
         }
-        pre{
+        
+        pre {
             text-align: left !important;
-            max-width:800px;
+            max-width: 800px;
             margin: 0 auto;
         }
         
@@ -31,12 +46,15 @@
         .example .align {
             height: 8em;
         }
-        .example .align.twelve{
+        
+        .example .align.twelve {
             height: 30em;
         }
-        .example .align.twelve p{
+        
+        .example .align.twelve p {
             width: 300px;
         }
+        
         body>*,
         body,
         #examples>h2 {
@@ -79,6 +97,8 @@
                 <a href="#menu">Menu</a></li>
             <li>
                 <a href="#compatability">Compatability</a></li>
+            <li>
+                <a href="https://github.com/SahAssar/css-framework/tree/gh-pages">Download</a></li>
         </ul>
         <div class="menu-icon-wrapper m-align m-center m-right">
             <div id="menu-icon"><span class="first"></span><span class="second"></span><span class="third"></span></div>
@@ -138,27 +158,27 @@
     <p>There are a few aditional classes in the grid, these are:</p>
     <dl>
         <dt><code>margin</code></dt>
-      <dd>Give all columns a margin of 1em</dd>
+        <dd>Give all columns a margin of 1em</dd>
         <dt><code>padding</code></dt>
-      <dd>Give all columns a padding of 1em</dd>
+        <dd>Give all columns a padding of 1em</dd>
         <dt><code>col</code></dt>
-      <dd>Switch the grid to vertical layout, see the <a href="#aligned-columns">Aligned equal columns</a> example.</dd>
+        <dd>Switch the grid to vertical layout, see the <a href="#aligned-columns">Aligned equal columns</a> example.</dd>
     </dl>
     <p>And these can be used on the columns themselves:</p>
     <dl>
         <dt><code>no-grow</code></dt>
-      <dd>The element will not grow to fill available space</dd>
+        <dd>The element will not grow to fill available space</dd>
         <dt><code>no-shrink</code></dt>
-      <dd>the element will not reliquish space to allow other elements to grow</dd>
+        <dd>the element will not reliquish space to allow other elements to grow</dd>
     </dl>
     <p>All flex and aligner related classes have three breakpoints which are used with prefixes:</p>
     <dl>
         <dt><code>.m-</code></dt>
-      <dd>Breakpoint at 1100px, example: <code>.m-six</code></dd>
+        <dd>Breakpoint at 1100px, example: <code>.m-six</code></dd>
         <dt><code>.s-</code></dt>
-      <dd>Breakpoint at 800px, example: <code>.s-six</code></dd>
+        <dd>Breakpoint at 800px, example: <code>.s-six</code></dd>
         <dt><code>.xs-</code></dt>
-      <dd>Breakpoint at 500px, example: <code>.xs-six</code></dd>
+        <dd>Breakpoint at 500px, example: <code>.xs-six</code></dd>
     </dl>
     <p>Example:</p>
     <div class="flex padding margin example">
@@ -178,7 +198,9 @@
         <div class="four align bottom left">align bottom left</div>
         <div class="four align bottom center">align bottom center</div>
         <div class="four align bottom right">align bottom right</div>
-        <div class="twelve align bottom right m-center s-top s-left"><p>Since the aligners have the same breakpoints as the grid you can easily move the content at different screensizes. This text will start on the bottom right, and move to center and then to top left as window size changes. The classes for this are <code>align bottom right m-center s-top s-left</code></p></div>
+        <div class="twelve align bottom right m-center s-top s-left">
+            <p>Since the aligners have the same breakpoints as the grid you can easily move the content at different screensizes. This text will start on the bottom right, and move to center and then to top left as window size changes. The classes for this are <code>align bottom right m-center s-top s-left</code></p>
+        </div>
     </div>
     <p></p>
     <h1 id="styling">General styling</h1>
@@ -268,9 +290,10 @@
             </ul>
     </div>
     <h1 id="menu">Menu</h1>
-    <p>The grid comes with a basic menu, that is either fixed by adding the class <code>fixed</code> on the <code>body</code> element, or static (default).<br>
-    <button class="toggle-fixed">Toggle fixed menu</button><br>
-    The standard HTML for a header with menu looks like this:
+    <p>The grid comes with a basic menu, that is either fixed by adding the class <code>fixed</code> on the <code>body</code> element, or static (default).
+        <br>
+        <button class="toggle-fixed">Toggle fixed menu</button>
+        <br> The standard HTML for a header with menu looks like this:
     </p>
     <pre>
 &lt;header class=&quot;flex padding&quot;&gt;
@@ -315,12 +338,12 @@ document.querySelector("#menu-icon").addEventListener("click", function () {
 });
     </pre>
     <h1 id="compatability">Compatability</h1>
-    <p>The grid is compatible with modern browsers (IE11+). It is tested on:<br>
-    IE11<br>
-    Edge 12<br>
-    Safari 8, 9<br>
-    Latest Chrome<br>
-    Latest Firefox</p>
+    <p>The grid is compatible with modern browsers (IE11+). It is tested on:
+        <br> IE11
+        <br> Edge 12
+        <br> Safari 8, 9
+        <br> Latest Chrome
+        <br> Latest Firefox</p>
     <div id="examples">
         <h2 id="aligned-columns">Example: Equal colums with aligned footer:</h2>
         <div class="flex margin padding">
