@@ -10,13 +10,25 @@
     <link rel="stylesheet" href="framework.pkgd.css">
     <link rel="stylesheet" href="custom.css">
     <style>
-        .example.flex>* {
+        #grid + button + button + .flex>*, #aligners + div>* {
             background: #eee;
             text-align: center
         }
         
-        .example.flex>*:after {
+        #grid + button + button + .flex>*:after {
             content: attr(class)
+        }
+        #aligners + div>*{
+            height: 8em;
+        }
+        body>*,body,#examples>h2{
+            text-align:center;
+        }
+        body>*>*{
+            text-align: left;
+        }
+        #examples>h2, body>h1{
+            border-bottom: 3px solid;
         }
     </style>
 </head>
@@ -29,32 +41,34 @@
                 </a>
         </div>
         <ul class="menu eight m-six align center space-around">
-            <li class="navbar-item index-1 first active first">
-                <a href="#" title='This is the first menu item.'>Home</a></li>
-            <li class="navbar-item index-2 dropdown sub-menu">
-                <a href="#" title=''>Second item</a>
-                <ul class="sub-menu-items">
-                    <li class="navbar-item index-1 first">
-                        <a href="#" title=''>Sub 1</a></li>
-                    <li class="navbar-item index-2 menu-item-class">
-                        <a href="#" title=''>Sub 2</a></li>
-                    <li class="navbar-item index-3">
-                        <a href="#" title=''>Sub 3</a></li>
-                    <li class="navbar-item index-4 last sub-class">
-                        <a href="#" title=''>Sub 4</a></li>
+            <li class="dropdown">
+                <a href="#examples">Examples</a>
+                <ul>
+                    <li>
+                        <a href="#aligned-columns">Aligned equal columns</a></li>
+                    <li>
+                        <a href="#">Sub 2</a></li>
+                    <li>
+                        <a href="#">Sub 3</a></li>
+                    <li>
+                        <a href="#">Sub 4</a></li>
                 </ul>
             </li>
-            <li class="navbar-item index-3">
-                <a href="#" title=''>Third item</a></li>
-            <li class="navbar-item index-4 last last">
-                <a href="#">Fourth item</a></li>
+            <li>
+                <a href="#grid">Grid</a></li>
+            <li>
+                <a href="#aligners">Aligners</a></li>
+            <li>
+                <a href="#styling">General styling</a></li>
         </ul>
         <div class="menu-icon-wrapper m-align m-center m-right">
             <div id="menu-icon"><span class="first"></span><span class="second"></span><span class="third"></span></div>
         </div>
     </header>
-    <h1>Grid with padding and margin</h1>
-    <div class="example flex padding margin">
+    <h1 id="grid">Grid</h1>
+    <button class="toggle-margin">Toggle margin class on grid</button>
+    <button class="toggle-padding">Toggle padding class on grid</button>
+    <div class="flex padding margin">
         <div class="one"></div>
         <div class="one"></div>
         <div class="one"></div>
@@ -101,150 +115,19 @@
         <div class="eleven"></div>
         <div class="one"></div>
     </div>
-    <h1>Grid with margin</h1>
-    <div class="example flex margin">
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="fifth"></div>
-        <div class="fifth"></div>
-        <div class="fifth"></div>
-        <div class="fifth"></div>
-        <div class="fifth"></div>
-        <div class="three"></div>
-        <div class="three"></div>
-        <div class="three"></div>
-        <div class="three"></div>
-        <div class="four"></div>
-        <div class="four"></div>
-        <div class="four"></div>
-        <div class="five"></div>
-        <div class="two"></div>
-        <div class="five"></div>
-        <div class="six"></div>
-        <div class="six"></div>
-        <div class="seven"></div>
-        <div class="five"></div>
-        <div class="eight"></div>
-        <div class="four"></div>
-        <div class="nine"></div>
-        <div class="three"></div>
-        <div class="ten"></div>
-        <div class="two"></div>
-        <div class="eleven"></div>
-        <div class="one"></div>
+    <h1 id="aligners">Aligners</h1>
+    <div class="flex margin padding">
+        <div class="four align top left">align top left</div>
+        <div class="four align top center">align top center</div>
+        <div class="four align top right">align top right</div>
+        <div class="four align center left">align center left</div>
+        <div class="four align center">align center</div>
+        <div class="four align center right">align center right</div>
+        <div class="four align bottom left">align bottom left</div>
+        <div class="four align bottom center">align bottom center</div>
+        <div class="four align bottom right">align bottom right</div>
     </div>
-    <h1>Grid with padding</h1>
-    <div class="example flex padding">
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="fifth"></div>
-        <div class="fifth"></div>
-        <div class="fifth"></div>
-        <div class="fifth"></div>
-        <div class="fifth"></div>
-        <div class="three"></div>
-        <div class="three"></div>
-        <div class="three"></div>
-        <div class="three"></div>
-        <div class="four"></div>
-        <div class="four"></div>
-        <div class="four"></div>
-        <div class="five"></div>
-        <div class="two"></div>
-        <div class="five"></div>
-        <div class="six"></div>
-        <div class="six"></div>
-        <div class="seven"></div>
-        <div class="five"></div>
-        <div class="eight"></div>
-        <div class="four"></div>
-        <div class="nine"></div>
-        <div class="three"></div>
-        <div class="ten"></div>
-        <div class="two"></div>
-        <div class="eleven"></div>
-        <div class="one"></div>
-    </div>
-    <h1>Grid</h1>
-    <div class="example flex">
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="fifth"></div>
-        <div class="fifth"></div>
-        <div class="fifth"></div>
-        <div class="fifth"></div>
-        <div class="fifth"></div>
-        <div class="three"></div>
-        <div class="three"></div>
-        <div class="three"></div>
-        <div class="three"></div>
-        <div class="four"></div>
-        <div class="four"></div>
-        <div class="four"></div>
-        <div class="five"></div>
-        <div class="two"></div>
-        <div class="five"></div>
-        <div class="six"></div>
-        <div class="six"></div>
-        <div class="seven"></div>
-        <div class="five"></div>
-        <div class="eight"></div>
-        <div class="four"></div>
-        <div class="nine"></div>
-        <div class="three"></div>
-        <div class="ten"></div>
-        <div class="two"></div>
-        <div class="eleven"></div>
-        <div class="one"></div>
-    </div>
+    <h1 id="styling">General styling</h1>
     <div class="container">
         <h1>This is &lt;h1&gt;</h1>
         <h2>This is &lt;h2&gt;</h2>
@@ -255,79 +138,105 @@
         <p>Donec at pellentesque nulla. Sed metus velit, faucibus eu magna sed, porta pretium arcu. Etiam vel pharetra arcu. Mauris vel viverra sem. Donec commodo ultrices orci eget molestie. Morbi elementum ante a erat mollis, vitae molestie velit malesuada. Phasellus vel fringilla augue. Integer et ex sed est tempus aliquam. Nunc vehicula finibus urna, vel cursus nunc pellentesque vel. Nunc pharetra mauris nec dignissim sagittis.</p>
         <h2>Forms</h2>
         <p>
-          Here is a simple form:
+            Here is a simple form:
         </p>
         <form method="get" action="#">
-          <fieldset>
-            <label for="email">Your email:</label>
-            <input name="email" type="text" id="email" size="25" placeholder="must be unique"/>
-            <label for="sex">Your gender:</label>
-            <select name="sex" id="sex">
-              <option value="none">don't want to say</option>
-              <option value="female">female</option>
-              <option value="male">male</option>
-            </select>
-            <input type="radio" id="under" name="age"/>
-            <label for="under">I'm under 18</label>
-            <input type="radio" id="over" name="age"/>
-            <label for="over">I'm over 18</label>
-            <label for="address">Your full address:</label>
-            <textarea name="address" id="address" cols="40" rows="3" placeholder="PO box is not allowed"></textarea>
-            <input type="checkbox" name="consent" id="consent" value="test"/>
-            <label for="consent">I agree with all possible terms and conditions</label>
-            <button type="submit">Subscribe</button>
-            <button type="reset">Reset</button>
-            <button disabled>Can't click</button>
-            <a class="button" href="#">Class button</a>
-          </fieldset>
+            <fieldset>
+                <label for="email">Your email:</label>
+                <input name="email" type="text" id="email" size="25" placeholder="must be unique" />
+                <label for="sex">Your gender:</label>
+                <select name="sex" id="sex">
+                    <option value="none">don't want to say</option>
+                    <option value="female">female</option>
+                    <option value="male">male</option>
+                </select>
+                <input type="radio" id="under" name="age" />
+                <label for="under">I'm under 18</label>
+                <input type="radio" id="over" name="age" />
+                <label for="over">I'm over 18</label>
+                <label for="address">Your full address:</label>
+                <textarea name="address" id="address" cols="40" rows="3" placeholder="PO box is not allowed"></textarea>
+                <input type="checkbox" name="consent" id="consent" value="test" />
+                <label for="consent">I agree with all possible terms and conditions</label>
+                <button type="submit">Subscribe</button>
+                <button type="reset">Reset</button>
+                <button disabled>Can't click</button>
+                <a class="button" href="#">Class button</a>
+            </fieldset>
         </form>
         <h2>Tables</h2>
         <p>
-          A simple table would look like this:
+            A simple table would look like this:
         </p>
         <table>
-          <thead>
-            <tr>
-              <th>Make</th>
-              <th>Price</th>
-              <th>Year</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>BMW X6</td>
-              <td>$75,000</td>
-              <td>2013</td>
-            </tr>
-            <tr>
-              <td>Mercedes-Benz E350</td>
-              <td>$52,700</td>
-              <td>2014</td>
-            </tr>
-          </tbody>
+            <thead>
+                <tr>
+                    <th>Make</th>
+                    <th>Price</th>
+                    <th>Year</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>BMW X6</td>
+                    <td>$75,000</td>
+                    <td>2013</td>
+                </tr>
+                <tr>
+                    <td>Mercedes-Benz E350</td>
+                    <td>$52,700</td>
+                    <td>2014</td>
+                </tr>
+            </tbody>
         </table>
         <h2>Lists</h2>
         <p>Just use standard <code>&lt;ul&gt;</code> and <code>&lt;ol&gt;</code> tags:</code>
-        <ul>
-          <li>Orange</li>
-          <li>
-            Apple
-            <ol>
-              <li>First</li>
-              <li>
-                Second
-                <ul>
-                  <li>Blue</li>
-                  <li>Yellow</li>
-                  <li>Green</li>
-                  <li>Red</li>
-                </ul>
-              </li>
-              <li>Third</li>
-            </ol>
-          </li>
-          <li>Appricot</li>
-        </ul>
+            <ul>
+                <li>Orange</li>
+                <li>
+                    Apple
+                    <ol>
+                        <li>First</li>
+                        <li>
+                            Second
+                            <ul>
+                                <li>Blue</li>
+                                <li>Yellow</li>
+                                <li>Green</li>
+                                <li>Red</li>
+                            </ul>
+                        </li>
+                        <li>Third</li>
+                    </ol>
+                </li>
+                <li>Appricot</li>
+            </ul>
+    </div>
+    <div id="examples">
+        <h2 id="aligned-columns">Example: Equal colums with aligned footer:</h2>
+        <div class="flex margin padding">
+            <div class="four m-six s-twelve flex margin col">
+                <h2 class="no-grow align center">Damn that dog</h2>
+                <p>Damn that dog . Curl into a furry donut chirp at birds and knock dish off table head butt cant eat out of my own dish steal the warm chair right after you get up so lick arm hair curl into a furry donut. Behind the couch knock over christmas tree i am the best mew, yet eat prawns daintily with a claw then lick paws clean wash down prawns with a lap of carnation milk then retire to the warmest spot on the couch to claw at the fabric before taking a catnap but present belly, scratch hand when stroked. Bathe private parts with tongue then lick owner's face run in circles. Use lap as chair spread kitty litter all over house yet burrow under covers all of a sudden cat goes crazy fall over dead (not really but gets sypathy), so loves cheeseburgers but make meme, make cute face. Unwrap toilet paper meow pee in the shoe. Stare at the wall, play with food and get confused by dust stare at the wall, play with food and get confused by dust, chase imaginary bugs, so poop on grasses give attitude, or chase laser pelt around the house and up and down stairs chasing phantoms. Play time. </p>
+                <div class="no-grow align center">
+                    <a href="#" class="button">Read more...</a>
+                </div>
+            </div>
+            <div class="four m-six s-twelve flex margin col">
+                <h2 class="no-grow align center">percolator seasonal</h2>
+                <p>Eu strong spoon percolator seasonal so grounds lungo medium espresso galão. Sweet redeye instant caramelization beans brewed aftertaste rich. Crema froth, foam extra, beans, doppio, frappuccino americano viennese organic extraction. Cultivar coffee extra percolator cultivar grounds medium that galão. And, id, aftertaste, breve, whipped macchiato aromatic americano ristretto. White plunger pot pumpkin spice, qui eu, sweet, and aroma sugar chicory carajillo variety.</p>
+                <div class="no-grow align center">
+                    <a href="#" class="button">Read more...</a>
+                </div>
+            </div>
+            <div class="four m-six s-twelve flex margin col">
+                <h2 class="no-grow align center">rump swine</h2>
+                <p>Bacon ipsum dolor amet rump swine pastrami shankle. Boudin frankfurter capicola, jowl meatball beef bresaola ground round kevin brisket picanha chuck. Leberkas turkey ball tip kielbasa swine drumstick biltong doner beef ribs pork belly cow kevin turducken frankfurter. Brisket capicola rump jowl chicken cow tri-tip turkey. Pork loin corned beef jerky leberkas chicken tail pork chop pork belly ground round shankle bacon hamburger landjaeger kevin. Tenderloin leberkas ribeye chicken pancetta brisket picanha, porchetta short loin meatloaf kevin tail turkey strip steak jowl. Jerky sausage spare ribs, ball tip biltong beef tongue fatback short loin boudin leberkas strip steak cow..</p>
+                <div class="no-grow align center">
+                    <a href="#" class="button">Read more...</a>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="custom.js"></script>
 </body>
