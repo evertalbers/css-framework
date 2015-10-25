@@ -4,23 +4,25 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A sample site | Ac tamen hic mallet non dolere.</title>
-    <meta name="description" content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. At coluit ipse amicitias.  An hoc usque quaque, aliter in vita?  Commoda autem et incommoda in eo gene…">
+    <title>Flex grid</title>
+    <meta name="description" content="Flex grid documentation">
     <link href='https://fonts.googleapis.com/css?family=Montserrat:700|Open+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="framework.pkgd.css">
     <link rel="stylesheet" href="custom.css">
     <style>
-        #grid + p  + button + button+ .flex>*,
-        #aligners + div>* {
+        .example > *, code {
             background: #eee;
             text-align: center
         }
-        dl{
+        dl, pre{
             max-width: 500px;
             display: inline-block;
         }
-        code{background: #eee;}
-
+        pre{
+            text-align: left !important;
+            max-width:800px;
+            margin: 0 auto;
+        }
         
         #grid + p + button + button + .flex>*:after {
             content: attr(class)
@@ -56,7 +58,7 @@
     <header class="flex padding">
         <div class="four m-six logo align center left">
             <a href="/">
-                    A sample site
+                    Flex framework
                 </a>
         </div>
         <ul class="menu eight m-six align center space-around">
@@ -65,12 +67,6 @@
                 <ul>
                     <li>
                         <a href="#aligned-columns">Aligned equal columns</a></li>
-                    <li>
-                        <a href="#">Sub 2</a></li>
-                    <li>
-                        <a href="#">Sub 3</a></li>
-                    <li>
-                        <a href="#">Sub 4</a></li>
                 </ul>
             </li>
             <li>
@@ -79,17 +75,20 @@
                 <a href="#aligners">Aligners</a></li>
             <li>
                 <a href="#styling">General styling</a></li>
+            <li>
+                <a href="#menu">Menu</a></li>
+            <li>
+                <a href="#compatability">Compatability</a></li>
         </ul>
         <div class="menu-icon-wrapper m-align m-center m-right">
             <div id="menu-icon"><span class="first"></span><span class="second"></span><span class="third"></span></div>
         </div>
     </header>
     <h1 id="grid">Grid</h1>
-    <p>The base grid is constructed with a container with the class <code>flex</code>, which then contains columns with classes <code>one</code> through <code>twelve</code></p>
-
+    <p>The base grid is constructed with a container with the class <code>flex</code>, which then contains columns with classes <code>one</code> through <code>twelve</code>, or the additional class <code>fifth</code></p>
     <button class="toggle-margin">Toggle margin class on grid</button>
     <button class="toggle-padding">Toggle padding class on grid</button>
-    <div class="flex padding margin">
+    <div class="flex padding margin example">
         <div class="one"></div>
         <div class="one"></div>
         <div class="one"></div>
@@ -161,8 +160,15 @@
         <dt><code>.xs-</code></dt>
       <dd>Breakpoint at 500px, example: <code>.xs-six</code></dd>
     </dl>
+    <p>Example:</p>
+    <div class="flex padding margin example">
+        <div class="three m-four s-six xs-twelve no-grow">three m-four s-six xs-twelve no-grow</div>
+        <div class="three m-four s-six xs-twelve no-grow">three m-four s-six xs-twelve no-grow</div>
+        <div class="three m-four s-six xs-twelve no-grow">three m-four s-six xs-twelve no-grow</div>
+        <div class="three m-four s-six xs-twelve no-grow">three m-four s-six xs-twelve no-grow</div>
+    </div>
     <h1 id="aligners">Aligners</h1>
-    <div class="flex margin padding">
+    <div class="flex margin padding example">
         <div class="four align top left">align top left</div>
         <div class="four align top center">align top center</div>
         <div class="four align top right">align top right</div>
@@ -176,6 +182,7 @@
     </div>
     <p></p>
     <h1 id="styling">General styling</h1>
+    <p>All colors and fontsizes are controlled in a file called custom.css. We recommend that you use a tool such as <a href="http://www.gridlover.net/app/">gridlover</a> to generate fontsizes for your site.</p>
     <div class="container">
         <h1>This is &lt;h1&gt;</h1>
         <h2>This is &lt;h2&gt;</h2>
@@ -260,6 +267,60 @@
                 <li>Appricot</li>
             </ul>
     </div>
+    <h1 id="menu">Menu</h1>
+    <p>The grid comes with a basic menu, that is either fixed by adding the class <code>fixed</code> on the <code>body</code> element, or static (default).<br>
+    <button class="toggle-fixed">Toggle fixed menu</button><br>
+    The standard HTML for a header with menu looks like this:
+    </p>
+    <pre>
+&lt;header class=&quot;flex padding&quot;&gt;
+    &lt;div class=&quot;four m-six logo align center left&quot;&gt;
+        &lt;a href=&quot;/&quot;&gt;
+                Home
+            &lt;/a&gt;
+    &lt;/div&gt;
+    &lt;ul class=&quot;menu eight m-six align center space-around&quot;&gt;
+        &lt;li&gt;
+            &lt;a href=&quot;#one&quot;&gt;Item one&lt;/a&gt;&lt;/li&gt;
+        &lt;li class=&quot;dropdown&quot;&gt;
+            &lt;a href=&quot;#two&quot;&gt;Item two&lt;/a&gt;
+            &lt;ul&gt;
+                &lt;li&gt;
+                    &lt;a href=&quot;#&quot;&gt;Sub 1&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;
+                    &lt;a href=&quot;#&quot;&gt;Sub 2&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;
+                    &lt;a href=&quot;#&quot;&gt;Sub 3&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;
+                    &lt;a href=&quot;#&quot;&gt;Sub 4&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;a href=&quot;#three&quot;&gt;Item three&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;div class=&quot;menu-icon-wrapper m-align m-center m-right&quot;&gt;
+        &lt;div id=&quot;menu-icon&quot;&gt;
+            &lt;span class=&quot;first&quot;&gt;&lt;/span&gt;
+            &lt;span class=&quot;second&quot;&gt;&lt;/span&gt;
+            &lt;span class=&quot;third&quot;&gt;&lt;/span&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/header&gt;
+    </pre>
+    <p>The JS for opening the menu on mobile/tablet is just four lines (no dependencies):</p>
+    <pre>
+document.querySelector("#menu-icon").addEventListener("click", function () {
+    document.querySelector("ul.menu").classList.toggle("show");
+    document.querySelector("#menu-icon").classList.toggle("active");
+});
+    </pre>
+    <h1 id="compatability">Compatability</h1>
+    <p>The grid is compatible with modern browsers (IE11+). It is tested on:<br>
+    IE11<br>
+    Edge 12<br>
+    Safari 8, 9<br>
+    Latest Chrome<br>
+    Latest Firefox</p>
     <div id="examples">
         <h2 id="aligned-columns">Example: Equal colums with aligned footer:</h2>
         <div class="flex margin padding">

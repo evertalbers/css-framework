@@ -1018,14 +1018,25 @@ legend {
 .menu ul,
 .menu.menu {
     margin: 0;
-    padding: 0
+    padding: 0;
+    color: inherit;
+    background:inherit;
 }
 
 .menu li {
     margin: 0 1em;
     list-style: none
 }
-
+body.fixed{
+    border-top: 10vh solid;
+}
+.fixed header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    min-height: 10vh;
+}
 header:after {
     content: "";
     clear: both;
@@ -1108,6 +1119,7 @@ header:after {
         margin: 0
     }
     .menu.show {
+        overflow-y: auto;
         max-height: 100vh
     }
     .menu li,

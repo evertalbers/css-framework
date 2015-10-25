@@ -8,3 +8,6 @@ document.querySelector(".toggle-margin").addEventListener("click", function () {
 document.querySelector(".toggle-padding").addEventListener("click", function () {
     document.querySelector("#grid + p + button + button + .flex").classList.toggle("padding");
 });
+document.querySelector(".toggle-fixed").addEventListener("click", function () {
+    document.querySelector("body").classList.toggle("fixed");
+});

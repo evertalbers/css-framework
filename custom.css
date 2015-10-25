@@ -1,6 +1,9 @@
 body {
     font-size: 1.125rem;
     line-height: 1.5625rem;
+    font-family: "Open Sans", "HelveticaNeue", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    color: #444;
+    background: #FDFDFA;
 }
 
 h1 {
@@ -31,10 +34,6 @@ h4 {
     margin-bottom: 1.5625rem;
 }
 
-body {
-    font-family: "Open Sans", "HelveticaNeue", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-}
-
 h1,
 h2,
 h3,
@@ -42,6 +41,6 @@ h4 {
     font-family: "Montserrat", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.menu {
-    background: #fff;
+header {
+    background: #FDFDFA;
 }
