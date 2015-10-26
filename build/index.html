@@ -1,0 +1,155 @@
+<!DOCTYPE html> <html> <head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta charset="utf-8">
+    <meta content="noindex" name="robots">
+<link rel="stylesheet" href="http://fonts.int3.se/brick/sourcecodepro.css">
+<link rel="stylesheet" href="http://fonts.int3.se/brick/sourcesanspro.css">
+    <title>Autoprefixer</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        html,
+        body {
+            height: 100%;
+            margin:0;
+            font-family: sourcesanspro;
+        }
+        a {
+            color: #07c;
+        }
+        body {
+            font-family: sans-serif;
+        }
+        
+        main {
+            flex-grow: 1;
+            display: flex;
+            align-items: stretch;
+            justify-content: space-between;
+        }
+        main,aside,h1{
+        margin: 0 16px;
+        }
+        main > div {
+            width: calc(50% - .5em);
+            display: flex;
+            flex-direction: column;
+        }
+        main{height:100vh;}
+        
+        h2 {
+            font-size: 1.5em;
+        }
+        h2 em {
+            display: inline-block;
+            font-weight: bold;
+            background-color: black;
+            color: white;
+            padding: .3em .5em;
+        }
+        .io {
+            resize: none;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding: .5em;
+        }
+        .io p {
+            padding-bottom: .5em;
+        }
+        .io textarea {
+            flex-grow: 1;
+            resize: none;
+            padding: .5em .8em;
+            font-family: sourcecodepro;
+        }
+        #lblInvalid {
+            display: none;
+            float: right;
+            color: red;
+            font-weight: bold;
+            padding: .4em .4em 0;
+        }
+        .inactive {
+            color: gray;
+        }
+        aside {
+            display: flex;
+            align-items: baseline;
+        }
+        aside > * {
+            margin: 0 .15em;
+        }
+        #options {
+            padding: 2px 4px;
+            width: 300px;
+            flex-grow: 1;
+        }
+        footer p {
+            padding: .8em;
+            text-align: center;
+        }
+    </style> </head> <body>
+    <main>
+        <div class="part1">
+            <h2>Flex grid customization</h2>
+            <div class="io">
+                <textarea autofocus="" id="input" spellcheck="false"></textarea>
+            </div>
+        </div>
+        <div class="part2">
+            <h2>Compiled CSS</h2>
+            <div class="io">
+                <textarea id="output" spellcheck="false"></textarea>
+            </div>
+        </div>
+    </main>
+    <script src="jquery-2.1.1.min.js"></script>
+    <script src="postcss.js"></script>
+    <script src="postcss-media-variables.js"></script>
+    <script src="postcss-css-variables.js"></script>
+    <script src="postcss-calc.js"></script>
+    <script src="csswring.js"></script>
+    <script src="autoprefixer.js"></script>
+    <script>
+        var postcss = require('postcss');
+        var mediaVariables = require('postcss-media-variables');
+        var cssvariables = require('postcss-css-variables');
+        var autoprefixer = require('autoprefixer');
+        var csswring = require('csswring');
+        var postcsscalc = require('postcss-calc');
+        
+        var input = $('#input')[0];
+        var output = $('#output')[0];
+        
+        $.get('../source/grid.css', function(data){
+            input.value = data;
+            process();
+        });
+        
+        function process() {
+            try {
+            postcss([
+                mediaVariables(),
+                cssvariables(),
+                postcsscalc(),
+                mediaVariables(),
+                autoprefixer({ browsers: ['last 2 versions'] }),
+                csswring()
+            ]).process(input.value).then(function (result) {
+                output.value = result.css;
+                //output.map = result.map.toString();
+            });
+
+                $(output).removeClass('inactive');
+                $(lblInvalid).hide();
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        $(input).on('keyup paste', function () {
+            process();
+        });
+    </script> </body>
+</html>

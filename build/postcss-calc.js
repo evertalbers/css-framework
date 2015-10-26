@@ -2117,873 +2117,89 @@ process.chdir = function (dir) {
 process.umask = function() { return 0; };
 
 },{}],8:[function(require,module,exports){
-
-var shallowCloneNode = require('./shallow-clone-node');
-
-// Splice on a parent scope onto a node
-// And return a detached clone
-var cloneSpliceParentOntoNodeWhen = function(node, parent, /*optional*/whenCb) {
-	whenCb = whenCb || function() {
-		return true;
-	};
-
-	var cloneList = [];
-
-	// Gather node ancestors and clone along the way
-	var current = node;
-	var isWhenNow = false;
-	while(current && !isWhenNow) {
-		if(current.type === 'decl') {
-			cloneList.push(current.clone());
-		}
-		else {
-			cloneList.push(shallowCloneNode(current));
-		}
-
-		isWhenNow = whenCb(current);
-		current = current.parent;
-	}
-
-
-	// Gather parent ancestors all the way up and clone along the way
-	// The list goes from lowest to highest ancestor
-	var cloneParentList = [];
-	var currentParent = parent;
-	while(currentParent) {
-		cloneParentList.push(shallowCloneNode(currentParent));
-
-		currentParent = currentParent.parent;
-	}
-	// Assign parents to our parent clones
-	cloneParentList.forEach(function(parentClone, index, cloneParentList) {
-		// Keep assigning parents detached until just very end
-		if(index + 1 < cloneParentList.length) {
-			//parentClone.moveTo(cloneParentList[index+1]);
-			parentClone.parent = cloneParentList[index + 1];
-		}
-	});
-
-
-	// Assign parents to our node clones
-	cloneList.forEach(function(clone, index, cloneList) {
-		// Keep assigning parents detached until just very end
-		if(index + 1 < cloneList.length) {
-			//clone.moveTo(cloneList[index+1]);
-			clone.parent = cloneList[index + 1];
-		// Then splice on the new parent scope
-		} else {
-			// Set the highest parent ancestor to back to where we should splice in
-			cloneParentList.slice(-1)[0].parent = current;
-			// Set the node clone to the lowest parent ancestor to finish off the splice
-			//clone.moveTo(cloneParentList[0]);
-			clone.parent = cloneParentList[0];
-		}
-	});
-
-	return cloneList[0];
-};
-
-module.exports = cloneSpliceParentOntoNodeWhen;
-
-},{"./shallow-clone-node":19}],9:[function(require,module,exports){
-var generateScopeList = require('./generate-scope-list');
-
-// Find a node starting from the given node that matches
-// Works on a PostCSS AST tree
-var findNodeAncestorWithSelector = function(selector, node) {
-	var matchingNode;
-
-	// Keep going until we run out of parents to search
-	// or we found the node
-	var currentNode = node;
-	while(currentNode.parent && !matchingNode) {
-		// A trick to get the selector split up. Generate a scope list on a clone(clean parent)
-		var currentNodeScopeList = generateScopeList(currentNode.clone(), true);
-
-		currentNodeScopeList.some(function(scopePieces) {
-			return scopePieces.some(function(scopePiece) {
-				if(scopePiece === selector) {
-					matchingNode = currentNode;
-					return true;
-				}
-
-				return false;
-			});
-		});
-
-		currentNode = currentNode.parent;
-	}
-
-	return matchingNode;
-};
-
-module.exports = findNodeAncestorWithSelector;
-
-},{"./generate-scope-list":13}],10:[function(require,module,exports){
-// Variables that referenced in some way by the target variable
-//
-// `variablesUsed`: Array of string variable names that may be in the map
-//
-// Returns: `object`
-//	 - `deps`: array of complete dependecies recursively gathered (entries from the `map`)
-//	 - `hasCircularOrSelfReference`: bool of whether there is some circular or self reference of dependencies.
-//	 	 - If true, the variable can't be deduced
-var gatherVariableDependencies = function(variablesUsed, map, _dependencyVariablesList) {
-	_dependencyVariablesList = _dependencyVariablesList || [];
-	var hasCircularOrSelfReference = false;
-
-	if(variablesUsed) {
-		_dependencyVariablesList = variablesUsed.reduce(function(dependencyVariablesList, variableUsedName) {
-			var isVariableInMap = !!map[variableUsedName];
-			var doesThisVarHaveCircularOrSelfReference = !isVariableInMap ? false : dependencyVariablesList.some(function(dep) {
-				return map[variableUsedName].some(function(mapItem) {
-					// If already in the list, we got a circular reference
-					if(dep === mapItem) {
-						return true;
-					}
-
-					return false;
-				});
-			});
-			// Update the overall state of dependency health
-			hasCircularOrSelfReference = hasCircularOrSelfReference || doesThisVarHaveCircularOrSelfReference;
-
-
-			if(isVariableInMap && !hasCircularOrSelfReference) {
-				dependencyVariablesList = dependencyVariablesList.concat(map[variableUsedName]);
-
-				(map[variableUsedName] || []).forEach(function(mapItem) {
-					var result = gatherVariableDependencies(mapItem.variablesUsed, map, dependencyVariablesList);
-					dependencyVariablesList = result.deps;
-					hasCircularOrSelfReference = hasCircularOrSelfReference || result.hasCircularOrSelfReference;
-				});
-			}
-
-			return dependencyVariablesList;
-		}, _dependencyVariablesList);
-	}
-
-	return {
-		deps: _dependencyVariablesList,
-		hasCircularOrSelfReference: hasCircularOrSelfReference
-	};
-};
-
-module.exports = gatherVariableDependencies;
-
-},{}],11:[function(require,module,exports){
-// Unit Tests: https://regex101.com/r/oP0fM9/15
-//
-// It is a shame the regex has to be this long. Maybe a CSS selector parser would be better.
-// We could almost use `/\b\s(?![><+~][\s]+?)/` to split the selector but this doesn't work with attribute selectors
-var RE_SELECTOR_DESCENDANT_SPLIT = (/(.*?(?:(?:\([^\)]+\)|\[[^\]]+\]|(?![><+~\s]).)+)(?:(?:(?:\s(?!>>))|(?:\t(?!>>))|(?:\s?>>\s?))(?!\s+))(?![><+~][\s]+?))/);
-
-
-var generateDescendantPiecesFromSelector = function(selector) {
-	return selector.split(RE_SELECTOR_DESCENDANT_SPLIT)
-		.filter(function(piece) {
-			if(piece.length > 0) {
-				return true;
-			}
-			return false;
-		})
-		.map(function(piece) {
-			// Trim whitespace which would be a normal descendant selector
-			// and trim off the CSS4 descendant `>>` into a normal descendant selector
-			return piece.trim().replace(/\s*?>>\s*?/g, '');
-		});
-};
-
-module.exports = generateDescendantPiecesFromSelector;
-
-},{}],12:[function(require,module,exports){
-// Unit Tests: https://regex101.com/r/oS4zJ8/3
-
-var RE_SELECTOR_DIRECT_DESCENDANT_SPLIT = (/(.*?(?:(?:\([^\)]+\)|\[[^\]]+\]|(?!>>|<|\+|~|\s).)+)(?:(?:(?:>(?!>))|(?:\s?>(?!>)\s?))(?!\s+))(?!(?:>>|<|\+|~)[\s]+?))/);
-
-
-var generateDirectDescendantPiecesFromSelector = function(selector) {
-	return selector.split(RE_SELECTOR_DIRECT_DESCENDANT_SPLIT)
-		.filter(function(piece) {
-			if(piece.length > 0) {
-				return true;
-			}
-			return false;
-		})
-		.map(function(piece) {
-			// Trim whitespace which would be a normal descendant selector
-			// and trim off the CSS4 descendant `>>` into a normal descendant selector
-			return piece.trim().replace(/\s*?>\s*?/g, '');
-		});
-};
-
-module.exports = generateDirectDescendantPiecesFromSelector;
-
-},{}],13:[function(require,module,exports){
-
-var generateDescendantPiecesFromSelector = require('./generate-descendant-pieces-from-selector');
-
-
-var generateScopeList = function(node, /*optional*/includeSelf) {
-	includeSelf = includeSelf || false;
-
-	var selectorScopeList = [
-		// Start off with one branch
-		[]
-	];
-	var currentNodeParent = includeSelf ? node : node.parent;
-	while(currentNodeParent) {
-
-		// `currentNodeParent.selectors` is a list of each comma separated piece of the selector
-		var scopePieces = (currentNodeParent.selectors || []).map(function(selectorPiece) {
-			return {
-				value: selectorPiece,
-				type: 'selector'
-			};
-		});
-
-		// If it is a at-rule, then we need to construct the proper piece
-		if(currentNodeParent.type === 'atrule') {
-			scopePieces = [].concat(currentNodeParent.params).map(function(param, index) {
-				return {
-					value: '@' + currentNodeParent.name + ' ' + param,
-					type: 'atrule'
-				};
-			});
-		}
-
-		// Branch each current scope for each comma separated selector
-		// Otherwise just keep the [1] branch going
-		var branches = (scopePieces.length > 0 ? scopePieces : [1]).map(function() {
-			return selectorScopeList.map(function(scopePieces) {
-				return scopePieces.slice(0);
-			});
-		});
-
-		scopePieces.forEach(function(scopeObject, index) {
-			// Update each selector string with the new piece
-			branches[index] = branches[index].map(function(scopeStringPieces) {
-
-				var descendantPieces = [scopeObject.value];
-				// Split at any descendant combinators to properly make the scope list
-				if(scopeObject.type === 'selector') {
-					descendantPieces = generateDescendantPiecesFromSelector(scopeObject.value);
-				}
-
-				// Add to the front of the array
-				scopeStringPieces.unshift.apply(scopeStringPieces, descendantPieces);
-
-				return scopeStringPieces;
-			});
-		});
-
-		// Start from a new list so we can
-		// Flatten out the branches a bit and and merge back into the list
-		selectorScopeList = [];
-		branches.forEach(function(branch) {
-			selectorScopeList = selectorScopeList.concat(branch);
-		});
-
-		currentNodeParent = currentNodeParent.parent;
-	}
-
-	return selectorScopeList;
-};
-
-module.exports = generateScopeList;
-
-},{"./generate-descendant-pieces-from-selector":11}],14:[function(require,module,exports){
-var isUnderScope = require('./is-under-scope');
-var generateScopeList = require('./generate-scope-list');
-
-var isNodeUnderScope = function(node, scopeNode, /*optional*/ignorePseudo) {
-	var nodeScopeList = generateScopeList(node, true);
-	var scopeNodeScopeList = generateScopeList(scopeNode, true);
-
-	return isUnderScope(nodeScopeList, scopeNodeScopeList, ignorePseudo);
-};
-
-module.exports = isNodeUnderScope;
-
-},{"./generate-scope-list":13,"./is-under-scope":16}],15:[function(require,module,exports){
-var alwaysAncestorSelector = {
-	'*': true,
-	':root': true,
-	'html': true
-};
-
-// This means it will be always be an ancestor of any other selector
-var isPieceIsAlwaysAncestorSelector = function(piece) {
-	return !!alwaysAncestorSelector[piece];
-};
-
-module.exports = isPieceIsAlwaysAncestorSelector;
-
-},{}],16:[function(require,module,exports){
-var escapeStringRegexp = require('escape-string-regexp');
-
-var isPieceAlwaysAncestorSelector = require('./is-piece-always-ancestor-selector');
-var generateDirectDescendantPiecesFromSelector = require('./generate-direct-descendant-pieces-from-selector');
-
-var RE_AT_RULE_SCOPE_PIECE  = (/^@.*/);
-// This will match pseudo selectors that have a base part
-// ex. .foo:hover
-// It will NOT match `:root`
-var RE_PSEUDO_SELECTOR = (/([^\s:]+)((?::|::)[^\s]*?)(\s+|$)/);
-
-
-function getScopeMatchResults(nodeScopeList, scopeNodeScopeList) {
-	var currentPieceOffset;
-	var scopePieceIndex;
-
-	// Check each comma separated piece of the complex selector
-	var doesMatchScope = scopeNodeScopeList.some(function(scopeNodeScopePieces) {
-		return nodeScopeList.some(function(nodeScopePieces) {
-
-			//console.log('sp', scopeNodeScopePieces);
-			//console.log('np', nodeScopePieces);
-
-			currentPieceOffset = null;
-			var wasEveryPieceFound = true;
-			for(scopePieceIndex = 0; scopePieceIndex < scopeNodeScopePieces.length; scopePieceIndex++) {
-				var scopePiece = scopeNodeScopePieces[scopePieceIndex];
-				var pieceOffset = currentPieceOffset || 0;
-
-				var foundIndex = -1;
-				// Look through the remaining pieces(start from the offset)
-				var piecesWeCanMatch = nodeScopePieces.slice(pieceOffset);
-				for(var nodeScopePieceIndex = 0; nodeScopePieceIndex < piecesWeCanMatch.length; nodeScopePieceIndex++) {
-					var nodeScopePiece = piecesWeCanMatch[nodeScopePieceIndex];
-					var overallIndex = pieceOffset + nodeScopePieceIndex;
-
-					// Find the scope piece at the end of the node selector
-					// Last-occurence
-					if(
-						// If the part on the end of the piece itself matches:
-						//		scopePiece `.bar` matches node `.bar`
-						//		scopePiece `.bar` matches node `.foo + .bar`
-						new RegExp(escapeStringRegexp(scopePiece) + '$').test(nodeScopePiece)
-					) {
-						foundIndex = overallIndex;
-						break;
-					}
-
-
-					// If the scope piece is a always-ancestor, then it is valid no matter what
-					//
-					// Or the node scope piece could be an always-ancestor selector itself
-					// And we only want the first occurence so we can keep matching future scope pieces
-					if(isPieceAlwaysAncestorSelector(scopePiece) || isPieceAlwaysAncestorSelector(nodeScopePiece)) {
-						foundIndex = overallIndex;
-
-						break;
-					}
-
-
-					// Handle any direct descendant operators in each piece
-					var directDescendantPieces = generateDirectDescendantPiecesFromSelector(nodeScopePiece);
-					// Only try to work out direct descendants if there was the `>` combinator, meaning multiple pieces
-					if(directDescendantPieces.length > 1) {
-
-						var ddNodeScopeList = [].concat([directDescendantPieces]);
-						// Massage into a direct descendant separated list
-						var ddScopeList = [].concat([
-							scopeNodeScopePieces
-								.slice(scopePieceIndex)
-								.reduce(function(prevScopePieces, scopePiece) {
-									return prevScopePieces.concat(generateDirectDescendantPiecesFromSelector(scopePiece));
-								}, [])
-						]);
-						var result = getScopeMatchResults(ddNodeScopeList, ddScopeList);
-
-						// If it matches completely
-						// or there are still more pieces to match in the future
-						if(result.doesMatchScope || scopePieceIndex + 1 < scopeNodeScopePieces.length) {
-							foundIndex = overallIndex;
-							// Move the scope forward the amount that piece consumed
-							// -1 because the of for-loop increments at each iteration
-							scopePieceIndex += result.scopePieceIndex - 1;
-						}
-
-						break;
-					}
-				}
-				
-
-				var isFurther = foundIndex >= pieceOffset;
-
-				currentPieceOffset = foundIndex + 1;
-
-				// Mimicing a `[].every` with a for-loop
-				wasEveryPieceFound = wasEveryPieceFound && isFurther;
-				if(!wasEveryPieceFound) {
-					break;
-				}
-			}
-
-			return wasEveryPieceFound;
-		});
-	});
-
-	return {
-		doesMatchScope: doesMatchScope,
-		nodeScopePieceIndex: currentPieceOffset - 1,
-		scopePieceIndex: scopePieceIndex
-	};
+/**
+ * Constants
+ */
+var SPLITTER = "\n    at "
+
+/**
+ * PostCSS helpers
+ */
+module.exports = {
+  sourceString: sourceString,
+  message: formatMessage,
+  try: tryCatch
 }
 
+/**
+ * Returns GNU style source
+ *
+ * @param {Object} source
+ */
+function sourceString(source) {
+  var message = "<css input>"
+  if (source) {
+    if (source.input && source.input.file) {
+      message = source.input.file
+    }
+    if (source.start) {
+      message += ":" + source.start.line + ":" + source.start.column
+    }
+  }
 
-
-var stripPseudoSelectorsFromScopeList = function(scopeList) {
-	return scopeList.map(function(scopePieces) {
-		return scopePieces.map(function(descendantPiece) {
-				// If not an at-rule piece, remove the pseudo selector part `@media (max-width: 300px)`
-				if(!RE_AT_RULE_SCOPE_PIECE.test(descendantPiece)) {
-					return descendantPiece.replace(new RegExp(RE_PSEUDO_SELECTOR.source, 'g'), function(whole, baseSelector, pseudo, trailingWhitespace) {
-						return baseSelector + trailingWhitespace;
-					});
-				}
-				return descendantPiece;
-			});
-	});
-};
-
-
-// Given the nodes scope, and the target scope,
-// Is the node in the same or under the target scope (cascade wise)
-//
-// Another way to think about it: Can the target scope cascade properties to the node?
-//
-// For scope-lists see: `generateScopeList`
-var isUnderScope = function(nodeScopeList, scopeNodeScopeList, /*optional*/ignorePseudo) {
-	// Because we only care about the scopeNodeScope matching to the nodeScope
-	// Remove the pseudo selectors from the nodeScope so it can match a broader version
-	// ex. `.foo:hover` can resolve variables from `.foo`
-	nodeScopeList = stripPseudoSelectorsFromScopeList(nodeScopeList);
-
-	if(ignorePseudo) {
-		scopeNodeScopeList = stripPseudoSelectorsFromScopeList(scopeNodeScopeList);
-	}
-
-	return getScopeMatchResults(nodeScopeList, scopeNodeScopeList).doesMatchScope;
-};
-
-isUnderScope.RE_PSEUDO_SELECTOR = RE_PSEUDO_SELECTOR;
-
-module.exports = isUnderScope;
-
-},{"./generate-direct-descendant-pieces-from-selector":12,"./is-piece-always-ancestor-selector":15,"escape-string-regexp":20}],17:[function(require,module,exports){
-var resolveValue = require('./resolve-value');
-var generateScopeList = require('./generate-scope-list');
-var gatherVariableDependencies = require('./gather-variable-dependencies');
-
-var isUnderScope = require('./is-under-scope');
-var isNodeUnderScope = require('./is-node-under-scope');
-
-var shallowCloneNode = require('./shallow-clone-node');
-var findNodeAncestorWithSelector = require('./find-node-ancestor-with-selector');
-var cloneSpliceParentOntoNodeWhen = require('./clone-splice-parent-onto-node-when');
-
-
-
-function eachMapItemDependencyOfDecl(variablesUsedList, map, decl, cb) {
-	// Now find any at-rule declarations that pertains to each rule
-	// Loop through the variables used
-	variablesUsedList.forEach(function(variableUsedName) {
-
-		// Find anything in the map that corresponds to that variable
-		gatherVariableDependencies(variablesUsedList, map).deps.forEach(function(mapItem) {
-
-			var mimicDecl;
-			if(mapItem.isUnderAtRule) {
-
-				// Get the inner-most selector of the at-rule scope variable declaration we are matching
-				//		Because the inner-most selector will be the same for each branch, we can look at the first one [0] or any of the others
-				var varDeclScopeList = generateScopeList(mapItem.parent, true);
-				var innerMostAtRuleSelector = varDeclScopeList[0].slice(-1)[0];
-				var nodeToSpliceParentOnto = findNodeAncestorWithSelector(innerMostAtRuleSelector, decl.parent);
-
-				// Splice on where the selector starts matching the selector inside at-rule
-				// See: `test/fixtures/cascade-on-nested-rules.css`
-				var varDeclAtRule = mapItem.parent.parent;
-				mimicDecl = cloneSpliceParentOntoNodeWhen(decl, varDeclAtRule, function(ancestor) {
-					return ancestor === nodeToSpliceParentOnto;
-				});
-
-
-				//console.log('amd og', generateScopeList(decl.parent, true));
-				//console.log('amd', generateScopeList(mimicDecl.parent, true));
-				//console.log(generateScopeList(mapItem.parent, true));
-				//console.log('amd isNodeUnderScope', isNodeUnderScope(mimicDecl.parent, mapItem.parent), mapItem.decl.value);
-			}
-			// TODO: use regex from `isUnderScope`
-			else if(isUnderScope.RE_PSEUDO_SELECTOR.test(mapItem.parent.selector)) {
-				// Create a detached clone
-				var ruleClone = shallowCloneNode(decl.parent);
-				ruleClone.parent = decl.parent.parent;
-
-				// Add the declaration to it
-				mimicDecl = decl.clone();
-				ruleClone.append(mimicDecl);
-
-				var lastPseudoSelectorMatches = mapItem.parent.selector.match(new RegExp(isUnderScope.RE_PSEUDO_SELECTOR.source + '$'));
-				var lastPseudoSelector = lastPseudoSelectorMatches ? lastPseudoSelectorMatches[2] : '';
-
-				ruleClone.selector += lastPseudoSelector;
-			}
-
-			// If it is under the proper scope,
-			// we need to check because we are iterating over all map entries
-			if(mimicDecl && isNodeUnderScope(mimicDecl, mapItem.parent, true)) {
-				cb(mimicDecl, mapItem);
-			}
-		});
-	});
+  return message
 }
 
-
-
-
-// Resolve the decl with the computed value
-// Also add in any media queries that change the value as necessary
-function resolveDecl(decl, map, /*optional*/shouldPreserve, /*optional*/logResolveValueResult) {
-	shouldPreserve = shouldPreserve || false;
-
-	// Make it chainable
-	var _logResolveValueResult = function(valueResults) {
-		if(logResolveValueResult) {
-			logResolveValueResult(valueResults);
-		}
-
-		return valueResults;
-	};
-
-
-
-	// Grab the balue for this declarations
-	var valueResults = _logResolveValueResult(resolveValue(decl, map));
-
-
-	// Resolve the cascade dependencies
-	// Now find any at-rule declarations that need to be added below each rule
-	eachMapItemDependencyOfDecl(valueResults.variablesUsed, map, decl, function(mimicDecl, mapItem) {
-		var ruleClone = shallowCloneNode(decl.parent);
-		var declClone = decl.clone();
-		// No mangle resolve
-		declClone.value = _logResolveValueResult(resolveValue(mimicDecl, map, true)).value;
-
-		// Add the declaration to our new rule
-		ruleClone.append(declClone);
-
-
-		if(mapItem.isUnderAtRule) {
-			// Create the clean atRule for which we place the declaration under
-			var atRuleNode = shallowCloneNode(mapItem.parent.parent);
-
-			// Add the rule to the atRule
-			atRuleNode.append(ruleClone);
-
-
-			// Since that atRuleNode can be nested in other atRules, we need to make the appropriate structure
-			var parentAtRuleNode = atRuleNode;
-			var currentAtRuleNode = mapItem.parent.parent;
-			while(currentAtRuleNode.parent.type === 'atrule') {
-				// Create a new clean clone of that at rule to nest under
-				var newParentAtRuleNode = shallowCloneNode(currentAtRuleNode.parent);
-
-				// Append the old parent
-				newParentAtRuleNode.append(parentAtRuleNode);
-				// Then set the new one as the current for next iteration
-				parentAtRuleNode = newParentAtRuleNode;
-
-				currentAtRuleNode = currentAtRuleNode.parent;
-			}
-
-			// Put the atRuleStructure after the declaration's rule
-			decl.parent.parent.insertAfter(decl.parent, parentAtRuleNode);
-		}
-		else {
-			ruleClone.selector = mimicDecl.parent.selector;
-
-			// Put the atRuleStructure after the declaration's rule
-			decl.parent.parent.insertAfter(decl.parent, ruleClone);
-		}
-	});
-
-
-	// If we are preserving var(...) usage and the value changed meaning it had some
-	if(shouldPreserve === true && decl.value !== valueResults.value) {
-		decl.cloneAfter();
-	}
-
-	// Set the new value after we are done dealing with at-rule stuff
-	decl.value = valueResults.value;
+/**
+ * Returns a GNU style message
+ *
+ * @param  {String} message
+ * @param  {Object} source a PostCSS source object
+ * @return {String}
+ */
+function formatMessage(message, source) {
+  return sourceString(source) + ": " + message
 }
 
+/**
+ * Do something and throw an error with enhanced exception (from given source)
+ *
+ * @param {Function} fn     [description]
+ * @param {[type]}   source [description]
+ */
+function tryCatch(fn, source) {
+  try {
+    return fn()
+  }
+  catch (err) {
+    err.originalMessage = err.message
+    err.message = formatMessage(err.message, source)
 
+    // if source seems interesting, enhance error
+    if (typeof source === "object") {
+      // add a stack item if something interesting available
+      if ((source.input && source.input.file) || source.start) {
+        var stack = err.stack.split(SPLITTER)
+        var firstStackItem = stack.shift()
+        stack.unshift(sourceString(source))
+        stack.unshift(firstStackItem)
+        err.stack = stack.join(SPLITTER)
+      }
 
+      if (source.input && source.input.file) {
+        err.fileName = source.input.file
+      }
+      if (source.start) {
+        err.lineNumber = source.start.line
+        err.columnNumber = source.start.column
+      }
+    }
 
+    throw err
+  }
+}
 
-
-module.exports = resolveDecl;
-
-},{"./clone-splice-parent-onto-node-when":8,"./find-node-ancestor-with-selector":9,"./gather-variable-dependencies":10,"./generate-scope-list":13,"./is-node-under-scope":14,"./is-under-scope":16,"./resolve-value":18,"./shallow-clone-node":19}],18:[function(require,module,exports){
-var generateScopeList = require('./generate-scope-list');
-var isNodeUnderScope = require('./is-node-under-scope');
-var gatherVariableDependencies = require('./gather-variable-dependencies');
-
-var findNodeAncestorWithSelector = require('./find-node-ancestor-with-selector');
-var cloneSpliceParentOntoNodeWhen = require('./clone-splice-parent-onto-node-when');
-
-
-
-// var() = var( <custom-property-name> [, <any-value> ]? )
-// matches `name[, fallback]`, captures "name" and "fallback"
-// See: http://dev.w3.org/csswg/css-variables/#funcdef-var
-var RE_VAR_FUNC = (/var\((--[^,\s]+?)(?:\s*,\s*(.+))?\)/);
-
-// Pass in a value string to parse/resolve and a map of available values
-// and we can figure out the final value
-//
-// `ignorePseudoScope`: Optional bool to determine whether the scope resolution should be left alone or not
-//
-// Note: We do not modify the declaration
-// Note: Resolving a declaration value without any `var(...)` does not harm the final value.
-//		This means, feel free to run everything through this function
-var resolveValue = function(decl, map, /*optional*/ignorePseudoScope, /*internal debugging*/_debugIsInternal) {
-
-	var resultantValue = decl.value;
-	var warnings = [];
-
-	var variablesUsedInValueMap = {};
-	// Use `replace` as a loop to go over all occurrences with the `g` flag
-	resultantValue.replace(new RegExp(RE_VAR_FUNC.source, 'g'), function(match, variableName, fallback) {
-		variablesUsedInValueMap[variableName] = true;
-	});
-	var variablesUsedInValue = Object.keys(variablesUsedInValueMap);
-
-
-	// Resolve any var(...) substitutons
-	var isResultantValueUndefined = false;
-	resultantValue = resultantValue.replace(new RegExp(RE_VAR_FUNC.source, 'g'), function(match, variableName, fallback) {
-		// Loop through the list of declarations for that value and find the one that best matches
-		// By best match, we mean, the variable actually applies. Criteria:
-		//		- is under the same scope
-		//		- The latest defined `!important` if any
-		var matchingVarDeclMapItem;
-		(map[variableName] || []).forEach(function(varDeclMapItem) {
-			// Make sure the variable declaration came from the right spot
-			// And if the current matching variable is already important, a new one to replace it has to be important
-			var isRoot = varDeclMapItem.parent.type === 'root' || varDeclMapItem.parent.selectors[0] === ':root';
-
-
-			//var debugIndent = _debugIsInternal ? '\t' : '';
-			//console.log(debugIndent, generateScopeList(decl.parent, true));
-			//console.log(debugIndent, generateScopeList(varDeclMapItem.parent, true));
-			//console.log(debugIndent, 'isNodeUnderScope', isNodeUnderScope(decl.parent, varDeclMapItem.parent), varDeclMapItem.decl.value);
-
-			if(
-				isNodeUnderScope(decl.parent, varDeclMapItem.parent, ignorePseudoScope) &&
-				// And if the currently matched declaration is `!important`, it will take another `!important` to override it
-				(!(matchingVarDeclMapItem || {}).isImportant || varDeclMapItem.isImportant)
-			) {
-				matchingVarDeclMapItem = varDeclMapItem;
-			}
-		});
-
-		// Default to the calculatedInPlaceValue which might be a previous fallback, then try this declarations fallback
-		var replaceValue = (matchingVarDeclMapItem || {}).calculatedInPlaceValue || fallback;
-		// Otherwise if the dependency health is good(no circular or self references), dive deeper and resolve
-		if(matchingVarDeclMapItem !== undefined && !gatherVariableDependencies(variablesUsedInValue, map).hasCircularOrSelfReference) {
-			// Splice the declaration parent onto the matching entry
-
-			var varDeclScopeList = generateScopeList(decl.parent.parent, true);
-			var innerMostAtRuleSelector = varDeclScopeList[0].slice(-1)[0];
-			var nodeToSpliceParentOnto = findNodeAncestorWithSelector(innerMostAtRuleSelector, matchingVarDeclMapItem.decl.parent);
-			// See: `test/fixtures/cascade-with-calc-expression-on-nested-rules`
-			var matchingMimicDecl = cloneSpliceParentOntoNodeWhen(matchingVarDeclMapItem.decl, decl.parent.parent, function(ancestor) {
-				return ancestor === nodeToSpliceParentOnto;
-			});
-
-			replaceValue = resolveValue(matchingMimicDecl, map, false, /*internal*/true).value;
-		}
-
-		isResultantValueUndefined = replaceValue === undefined;
-		if(isResultantValueUndefined) {
-			warnings.push(['variable ' + variableName + ' is undefined and used without a fallback', { node: decl }]);
-		}
-
-		return replaceValue;
-	});
-
-	return {
-		// The resolved value
-		value: !isResultantValueUndefined ? resultantValue : undefined,
-		// Array of variable names used in resolving this value
-		variablesUsed: variablesUsedInValue,
-		// Any warnings generated from parsing this value
-		warnings: warnings
-	};
-};
-
-resolveValue.RE_VAR_FUNC = RE_VAR_FUNC;
-
-
-module.exports = resolveValue;
-
-},{"./clone-splice-parent-onto-node-when":8,"./find-node-ancestor-with-selector":9,"./gather-variable-dependencies":10,"./generate-scope-list":13,"./is-node-under-scope":14}],19:[function(require,module,exports){
-// Inspired by the PostCSS clone: https://github.com/postcss/postcss/blob/caba908d0f4e362466252202e6be84660c33d8a5/lib/node.js#L17
-var shallowCloneNode = function(obj, parent) {
-	var cloned = new obj.constructor();
-
-	Object.keys(obj).forEach(function(i) {
-		if (!obj.hasOwnProperty(i)) {
-			return;
-		}
-
-		var value = obj[i];
-		var type = typeof value;
-
-		if (i === 'parent' && type === 'object') {
-			if (parent) {
-				cloned[i] = parent;
-			}
-		}
-		else if(i === 'source') {
-			cloned[i] = value;
-		}
-		else if (value instanceof Array) {
-			if(i === 'nodes') {
-				cloned[i] = [];
-			}
-			else {
-				cloned[i] = value.map(function(j) {
-					shallowCloneNode(j, cloned);
-				});
-			}
-		}
-		else if (
-			i !== 'before' && i !== 'after' &&
-			i !== 'between' && i !== 'semicolon'
-		) {
-			if(type === 'object') {
-				value = shallowCloneNode(value);
-			}
-
-			cloned[i] = value;
-		}
-	});
-
-	return cloned;
-};
-
-module.exports = shallowCloneNode;
-
-},{}],20:[function(require,module,exports){
-'use strict';
-
-var matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
-
-module.exports = function (str) {
-	if (typeof str !== 'string') {
-		throw new TypeError('Expected a string');
-	}
-
-	return str.replace(matchOperatorsRe,  '\\$&');
-};
-
-},{}],21:[function(require,module,exports){
-var hasOwn = Object.prototype.hasOwnProperty;
-var toStr = Object.prototype.toString;
-var undefined;
-
-var isArray = function isArray(arr) {
-	if (typeof Array.isArray === 'function') {
-		return Array.isArray(arr);
-	}
-
-	return toStr.call(arr) === '[object Array]';
-};
-
-var isPlainObject = function isPlainObject(obj) {
-	'use strict';
-	if (!obj || toStr.call(obj) !== '[object Object]') {
-		return false;
-	}
-
-	var has_own_constructor = hasOwn.call(obj, 'constructor');
-	var has_is_property_of_method = obj.constructor && obj.constructor.prototype && hasOwn.call(obj.constructor.prototype, 'isPrototypeOf');
-	// Not own constructor property must be Object
-	if (obj.constructor && !has_own_constructor && !has_is_property_of_method) {
-		return false;
-	}
-
-	// Own properties are enumerated firstly, so to speed up,
-	// if last one is own, then all properties are own.
-	var key;
-	for (key in obj) {}
-
-	return key === undefined || hasOwn.call(obj, key);
-};
-
-module.exports = function extend() {
-	'use strict';
-	var options, name, src, copy, copyIsArray, clone,
-		target = arguments[0],
-		i = 1,
-		length = arguments.length,
-		deep = false;
-
-	// Handle a deep copy situation
-	if (typeof target === 'boolean') {
-		deep = target;
-		target = arguments[1] || {};
-		// skip the boolean and the target
-		i = 2;
-	} else if ((typeof target !== 'object' && typeof target !== 'function') || target == null) {
-		target = {};
-	}
-
-	for (; i < length; ++i) {
-		options = arguments[i];
-		// Only deal with non-null/undefined values
-		if (options != null) {
-			// Extend the base object
-			for (name in options) {
-				src = target[name];
-				copy = options[name];
-
-				// Prevent never-ending loop
-				if (target === copy) {
-					continue;
-				}
-
-				// Recurse if we're merging plain objects or arrays
-				if (deep && copy && (isPlainObject(copy) || (copyIsArray = isArray(copy)))) {
-					if (copyIsArray) {
-						copyIsArray = false;
-						clone = src && isArray(src) ? src : [];
-					} else {
-						clone = src && isPlainObject(src) ? src : {};
-					}
-
-					// Never move original objects, clone them
-					target[name] = extend(deep, clone, copy);
-
-				// Don't bring in undefined values
-				} else if (copy !== undefined) {
-					target[name] = copy;
-				}
-			}
-		}
-	}
-
-	// Return the modified object
-	return target;
-};
-
-
-},{}],22:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -3075,7 +2291,7 @@ var AtRule = (function (_Container) {
 
 exports['default'] = AtRule;
 module.exports = exports['default'];
-},{"./container":24,"./warn-once":44}],23:[function(require,module,exports){
+},{"./container":11,"./warn-once":31}],10:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -3133,7 +2349,7 @@ var Comment = (function (_Node) {
 
 exports['default'] = Comment;
 module.exports = exports['default'];
-},{"./node":31,"./warn-once":44}],24:[function(require,module,exports){
+},{"./node":18,"./warn-once":31}],11:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -3684,7 +2900,7 @@ var Container = (function (_Node) {
 
 exports['default'] = Container;
 module.exports = exports['default'];
-},{"./at-rule":22,"./comment":23,"./declaration":26,"./node":31,"./parse":32,"./root":38,"./rule":39,"./warn-once":44}],25:[function(require,module,exports){
+},{"./at-rule":9,"./comment":10,"./declaration":13,"./node":18,"./parse":19,"./root":25,"./rule":26,"./warn-once":31}],12:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -3789,7 +3005,7 @@ var CssSyntaxError = (function (_SyntaxError) {
 
 exports['default'] = CssSyntaxError;
 module.exports = exports['default'];
-},{"./warn-once":44,"supports-color":58}],26:[function(require,module,exports){
+},{"./warn-once":31,"supports-color":45}],13:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -3847,7 +3063,7 @@ var Declaration = (function (_Node) {
 
 exports['default'] = Declaration;
 module.exports = exports['default'];
-},{"./node":31,"./warn-once":44}],27:[function(require,module,exports){
+},{"./node":18,"./warn-once":31}],14:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -3952,7 +3168,7 @@ var Input = (function () {
 
 exports['default'] = Input;
 module.exports = exports['default'];
-},{"./css-syntax-error":25,"./previous-map":35,"path":6}],28:[function(require,module,exports){
+},{"./css-syntax-error":12,"./previous-map":22,"path":6}],15:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4222,7 +3438,7 @@ var LazyResult = (function () {
 
 exports['default'] = LazyResult;
 module.exports = exports['default'];
-},{"./map-generator":30,"./parse":32,"./result":37,"./stringify":41,"./warn-once":44}],29:[function(require,module,exports){
+},{"./map-generator":17,"./parse":19,"./result":24,"./stringify":28,"./warn-once":31}],16:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4285,7 +3501,7 @@ var list = {
 
 exports['default'] = list;
 module.exports = exports['default'];
-},{}],30:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4574,7 +3790,7 @@ var _default = (function () {
 
 exports['default'] = _default;
 module.exports = exports['default'];
-},{"js-base64":46,"path":6,"source-map":57}],31:[function(require,module,exports){
+},{"js-base64":33,"path":6,"source-map":44}],18:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4877,7 +4093,7 @@ var Node = (function () {
 
 exports['default'] = Node;
 module.exports = exports['default'];
-},{"./css-syntax-error":25,"./stringifier":40,"./stringify":41,"./warn-once":44}],32:[function(require,module,exports){
+},{"./css-syntax-error":12,"./stringifier":27,"./stringify":28,"./warn-once":31}],19:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4908,7 +4124,7 @@ function parse(css, opts) {
 }
 
 module.exports = exports['default'];
-},{"./input":27,"./parser":33}],33:[function(require,module,exports){
+},{"./input":14,"./parser":20}],20:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -5433,7 +4649,7 @@ var Parser = (function () {
 
 exports['default'] = Parser;
 module.exports = exports['default'];
-},{"./at-rule":22,"./comment":23,"./declaration":26,"./root":38,"./rule":39,"./tokenize":42}],34:[function(require,module,exports){
+},{"./at-rule":9,"./comment":10,"./declaration":13,"./root":25,"./rule":26,"./tokenize":29}],21:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -5529,7 +4745,7 @@ postcss.root = function (defaults) {
 
 exports['default'] = postcss;
 module.exports = exports['default'];
-},{"./at-rule":22,"./comment":23,"./declaration":26,"./list":29,"./parse":32,"./processor":36,"./root":38,"./rule":39,"./stringify":41,"./vendor":43}],35:[function(require,module,exports){
+},{"./at-rule":9,"./comment":10,"./declaration":13,"./list":16,"./parse":19,"./processor":23,"./root":25,"./rule":26,"./stringify":28,"./vendor":30}],22:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -5642,7 +4858,7 @@ var PreviousMap = (function () {
 
 exports['default'] = PreviousMap;
 module.exports = exports['default'];
-},{"fs":1,"js-base64":46,"path":6,"source-map":57}],36:[function(require,module,exports){
+},{"fs":1,"js-base64":33,"path":6,"source-map":44}],23:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -5715,7 +4931,7 @@ var Processor = (function () {
 
 exports['default'] = Processor;
 module.exports = exports['default'];
-},{"../package":59,"./lazy-result":28}],37:[function(require,module,exports){
+},{"../package":46,"./lazy-result":15}],24:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -5776,7 +4992,7 @@ var Result = (function () {
 
 exports['default'] = Result;
 module.exports = exports['default'];
-},{"./warning":45}],38:[function(require,module,exports){
+},{"./warning":32}],25:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -5876,7 +5092,7 @@ var Root = (function (_Container) {
 
 exports['default'] = Root;
 module.exports = exports['default'];
-},{"./container":24,"./lazy-result":28,"./processor":36,"./warn-once":44}],39:[function(require,module,exports){
+},{"./container":11,"./lazy-result":15,"./processor":23,"./warn-once":31}],26:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -5939,7 +5155,7 @@ var Rule = (function (_Container) {
 
 exports['default'] = Rule;
 module.exports = exports['default'];
-},{"./container":24,"./list":29,"./warn-once":44}],40:[function(require,module,exports){
+},{"./container":11,"./list":16,"./warn-once":31}],27:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -6275,7 +5491,7 @@ var Stringifier = (function () {
 
 exports['default'] = Stringifier;
 module.exports = exports['default'];
-},{}],41:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -6293,7 +5509,7 @@ function stringify(node, builder) {
 }
 
 module.exports = exports['default'];
-},{"./stringifier":40}],42:[function(require,module,exports){
+},{"./stringifier":27}],29:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -6517,7 +5733,7 @@ function tokenize(input) {
 }
 
 module.exports = exports['default'];
-},{}],43:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -6543,7 +5759,7 @@ exports['default'] = {
 
 };
 module.exports = exports['default'];
-},{}],44:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -6558,7 +5774,7 @@ function warnOnce(message) {
 }
 
 module.exports = exports['default'];
-},{}],45:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -6601,7 +5817,7 @@ var Warning = (function () {
 
 exports['default'] = Warning;
 module.exports = exports['default'];
-},{}],46:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 /*
  * $Id: base64.js,v 2.15 2014/04/05 12:58:57 dankogai Exp dankogai $
  *
@@ -6797,7 +6013,7 @@ module.exports = exports['default'];
     }
 })(this);
 
-},{"buffer":2}],47:[function(require,module,exports){
+},{"buffer":2}],34:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -6903,7 +6119,7 @@ module.exports = exports['default'];
   exports.ArraySet = ArraySet;
 }
 
-},{"./util":56}],48:[function(require,module,exports){
+},{"./util":43}],35:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -7046,7 +6262,7 @@ module.exports = exports['default'];
   };
 }
 
-},{"./base64":49}],49:[function(require,module,exports){
+},{"./base64":36}],36:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -7116,7 +6332,7 @@ module.exports = exports['default'];
   };
 }
 
-},{}],50:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -7230,7 +6446,7 @@ module.exports = exports['default'];
   };
 }
 
-},{}],51:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2014 Mozilla Foundation and contributors
@@ -7312,7 +6528,7 @@ module.exports = exports['default'];
   exports.MappingList = MappingList;
 }
 
-},{"./util":56}],52:[function(require,module,exports){
+},{"./util":43}],39:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -7429,7 +6645,7 @@ module.exports = exports['default'];
   };
 }
 
-},{}],53:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -8513,7 +7729,7 @@ module.exports = exports['default'];
   exports.IndexedSourceMapConsumer = IndexedSourceMapConsumer;
 }
 
-},{"./array-set":47,"./base64-vlq":48,"./binary-search":50,"./quick-sort":52,"./util":56}],54:[function(require,module,exports){
+},{"./array-set":34,"./base64-vlq":35,"./binary-search":37,"./quick-sort":39,"./util":43}],41:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -8911,7 +8127,7 @@ module.exports = exports['default'];
   exports.SourceMapGenerator = SourceMapGenerator;
 }
 
-},{"./array-set":47,"./base64-vlq":48,"./mapping-list":51,"./util":56}],55:[function(require,module,exports){
+},{"./array-set":34,"./base64-vlq":35,"./mapping-list":38,"./util":43}],42:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -9321,7 +8537,7 @@ module.exports = exports['default'];
   exports.SourceNode = SourceNode;
 }
 
-},{"./source-map-generator":54,"./util":56}],56:[function(require,module,exports){
+},{"./source-map-generator":41,"./util":43}],43:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -9692,7 +8908,7 @@ module.exports = exports['default'];
   exports.compareByGeneratedPositionsInflated = compareByGeneratedPositionsInflated;
 }
 
-},{}],57:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 /*
  * Copyright 2009-2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE.txt or:
@@ -9702,11 +8918,11 @@ exports.SourceMapGenerator = require('./lib/source-map-generator').SourceMapGene
 exports.SourceMapConsumer = require('./lib/source-map-consumer').SourceMapConsumer;
 exports.SourceNode = require('./lib/source-node').SourceNode;
 
-},{"./lib/source-map-consumer":53,"./lib/source-map-generator":54,"./lib/source-node":55}],58:[function(require,module,exports){
+},{"./lib/source-map-consumer":40,"./lib/source-map-generator":41,"./lib/source-node":42}],45:[function(require,module,exports){
 'use strict';
 module.exports = false;
 
-},{}],59:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 module.exports={
   "name": "postcss",
   "version": "5.0.10",
@@ -9772,7 +8988,7 @@ module.exports={
   "homepage": "https://github.com/postcss/postcss#readme",
   "_id": "postcss@5.0.10",
   "_shasum": "86eacc9036c5c063e27138bf9503e1de26ab69fe",
-  "_from": "postcss@^5.0.5",
+  "_from": "postcss@^5.0.2",
   "_npmVersion": "2.14.4",
   "_nodeVersion": "4.1.2",
   "_npmUser": {
@@ -9798,270 +9014,301 @@ module.exports={
   "readme": "ERROR: No README data found!"
 }
 
-},{}],"postcss-css-variables":[function(require,module,exports){
-// PostCSS CSS Variables (postcss-css-variables)
-// v0.5.0
-//
-// https://github.com/MadLittleMods/postcss-css-variables
+},{}],47:[function(require,module,exports){
+/**
+ * Module dependencies
+ */
+var balanced = require("balanced-match")
+var reduceFunctionCall = require("reduce-function-call")
 
-// For Debugging
-//var nomo = require('node-monkey').start({port: 50501});
+/**
+ * Constantes
+ */
+var MAX_STACK = 100 // should be enough for a single calc()...
+var NESTED_CALC_RE = /(\+|\-|\*|\\|[^a-z]|)(\s*)(\()/g
 
-var postcss = require('postcss');
-var extend = require('extend');
+/**
+ * Global variables
+ */
+var stack
 
-var shallowCloneNode = require('./lib/shallow-clone-node');
-var resolveValue = require('./lib/resolve-value');
-var resolveDecl = require('./lib/resolve-decl');
+/**
+ * Expose reduceCSSCalc plugin
+ *
+ * @type {Function}
+ */
+module.exports = reduceCSSCalc
 
+/**
+ * Reduce CSS calc() in a string, whenever it's possible
+ *
+ * @param {String} value css input
+ */
+function reduceCSSCalc(value, decimalPrecision) {
+  stack = 0
+  decimalPrecision = Math.pow(10, decimalPrecision === undefined ? 5 : decimalPrecision)
 
-// A custom property is any property whose name starts with two dashes (U+002D HYPHEN-MINUS)
-// `--foo`
-// See: http://dev.w3.org/csswg/css-variables/#custom-property
-var RE_VAR_PROP = (/(--(.+))/);
+  /**
+   * Evaluates an expression
+   *
+   * @param {String} expression
+   * @returns {String}
+   */
+  function evaluateExpression (expression, functionIdentifier, call) {
+    if (stack++ > MAX_STACK) {
+      stack = 0
+      throw new Error("Call stack overflow for " + call)
+    }
 
+    if (expression === "") {
+      throw new Error(functionIdentifier + "(): '" + call + "' must contain a non-whitespace string")
+    }
 
+    expression = evaluateNestedExpression(expression, call)
 
+    var units = getUnitsInExpression(expression)
 
-function eachCssVariableDeclaration(css, cb) {
-	// Loop through all of the declarations and grab the variables and put them in the map
-	css.walkDecls(function(decl) {
-		// If declaration is a variable
-		if(RE_VAR_PROP.test(decl.prop)) {
-			cb(decl);
-		}
-	});
+    // If multiple units let the expression be (i.e. browser calc())
+    if (units.length > 1) {
+      return functionIdentifier + "(" + expression + ")"
+    }
+
+    var unit = units[0] || ""
+
+    if (unit === "%") {
+      // Convert percentages to numbers, to handle expressions like: 50% * 50% (will become: 25%):
+      expression = expression.replace(/\b[0-9\.]+%/g, function(percent) {
+        return parseFloat(percent.slice(0, -1)) * 0.01
+      })
+    }
+
+    // Remove units in expression:
+    var toEvaluate = expression.replace(new RegExp(unit, "g"), "")
+    var result
+
+    try {
+      result = eval(toEvaluate)
+    }
+    catch (e) {
+      return functionIdentifier + "(" + expression + ")"
+    }
+
+    // Transform back to a percentage result:
+    if (unit === "%") {
+      result *= 100
+    }
+
+    // adjust rounding shit
+    // (0.1 * 0.2 === 0.020000000000000004)
+    result = Math.round(result * decimalPrecision) / decimalPrecision
+
+    // We don't need units for zero values...
+    if (result !== 0) {
+      result += unit
+    }
+
+    return result
+  }
+
+  /**
+   * Evaluates nested expressions
+   *
+   * @param {String} expression
+   * @returns {String}
+   */
+  function evaluateNestedExpression(expression, call) {
+    var evaluatedPart = ""
+    var nonEvaluatedPart = expression
+    var matches
+    while ((matches = NESTED_CALC_RE.exec(nonEvaluatedPart))) {
+      if (matches[0].index > 0) {
+        evaluatedPart += nonEvaluatedPart.substring(0, matches[0].index)
+      }
+
+      var balancedExpr = balanced("(", ")", nonEvaluatedPart.substring([0].index))
+      if (balancedExpr.body === "") {
+        throw new Error("'" + expression + "' must contain a non-whitespace string")
+      }
+
+      var evaluated = evaluateExpression(balancedExpr.body, "", call)
+
+      evaluatedPart += balancedExpr.pre + evaluated
+      nonEvaluatedPart = balancedExpr.post
+    }
+
+    return evaluatedPart + nonEvaluatedPart
+  }
+
+  return reduceFunctionCall(value, /((?:\-[a-z]+\-)?calc)\(/, evaluateExpression)
 }
 
+/**
+ * Checks what units are used in an expression
+ *
+ * @param {String} expression
+ * @returns {Array}
+ */
 
+function getUnitsInExpression(expression) {
+  var uniqueUnits = []
+  var unitRegEx = /[\.0-9]([%a-z]+)/g
+  var matches = unitRegEx.exec(expression)
 
-function cleanUpNode(node) {
-	// If we removed all of the declarations in the rule(making it empty),
-	// then just remove it
-	var nodeToPossiblyCleanUp = node;
-	while(nodeToPossiblyCleanUp && nodeToPossiblyCleanUp.nodes.length <= 0) {
-		var nodeToRemove = nodeToPossiblyCleanUp.type !== 'root' ? nodeToPossiblyCleanUp : null;
+  while (matches) {
+    if (!matches || !matches[1]) {
+      continue
+    }
 
-		if(nodeToRemove) {
-			// Get a reference to it before we remove
-			// and lose reference to the child after removing it
-			nodeToPossiblyCleanUp = nodeToRemove.parent;
+    if (uniqueUnits.indexOf(matches[1]) === -1) {
+      uniqueUnits.push(matches[1])
+    }
 
-			nodeToRemove.remove();
-		}
-		else {
-			nodeToPossiblyCleanUp = null;
-		}
-	}
+    matches = unitRegEx.exec(expression)
+  }
+
+  return uniqueUnits
 }
 
+},{"balanced-match":48,"reduce-function-call":49}],48:[function(require,module,exports){
+module.exports = function(a, b, str) {
+  var bal = 0;
+  var m = {};
 
-var defaults = {
-	// Allows you to preserve custom properties & var() usage in output.
-	// `true`, `false`, or `'computed'`
-	preserve: false,
-	// Define variables via JS
-	// Simple key-value pair
-	// or an object with a `value` property and an optional `isImportant` bool property
-	variables: {}
+  for (var i = 0; i < str.length; i++) {
+    if (a == str.substr(i, a.length)) {
+      if (!('start' in m)) m.start = i;
+      bal++;
+    }
+    else if (b == str.substr(i, b.length) && 'start' in m) {
+      bal--;
+      if (!bal) {
+        m.end = i;
+        m.pre = str.substr(0, m.start);
+        m.body = (m.end - m.start > 1)
+          ? str.substring(m.start + a.length, m.end)
+          : '';
+        m.post = str.slice(m.end + b.length);
+        return m;
+      }
+    }
+  }
 };
 
-module.exports = postcss.plugin('postcss-css-variables', function(options) {
 
-	var opts = extend({}, defaults, options);
+},{}],49:[function(require,module,exports){
+/*
+ * Module dependencies
+ */
+var balanced = require("balanced-match")
 
-	// Work with opts here
+/**
+ * Expose `reduceFunctionCall`
+ *
+ * @type {Function}
+ */
+module.exports = reduceFunctionCall
 
-	return function (css, result) {
-		// Transform CSS AST here
+/**
+ * Walkthrough all expressions, evaluate them and insert them into the declaration
+ *
+ * @param {Array} expressions
+ * @param {Object} declaration
+ */
 
-		/* * /
-		try {
-		/* */
+function reduceFunctionCall(string, functionRE, callback) {
+  var call = string
+  return getFunctionCalls(string, functionRE).reduce(function(string, obj) {
+    return string.replace(obj.functionIdentifier + "(" + obj.matches.body + ")", evalFunctionCall(obj.matches.body, obj.functionIdentifier, callback, call, functionRE))
+  }, string)
+}
 
-		// List of nodes that if empty, will be removed
-		// We use this because we don't want to modify the AST when we still need to reference these later on
-		var nodesToRemoveAtEnd = [];
+/**
+ * Parses expressions in a value
+ *
+ * @param {String} value
+ * @returns {Array}
+ * @api private
+ */
 
-		// Map of variable names to a list of declarations
-		var map = {};
+function getFunctionCalls(call, functionRE) {
+  var expressions = []
 
-		// Add the js defined variables `opts.variables` to the map
-		map = extend(
-			map,
-			Object.keys(opts.variables).reduce(function(prevVariableMap, variableName) {
-				var variableEntry = opts.variables[variableName];
-				// Automatically prefix any variable with `--` (CSS custom property syntax) if it doesn't have it already
-				variableName = variableName.slice(0, 2) === '--' ? variableName : '--' + variableName;
-				var variableValue = (variableEntry || {}).value || variableEntry;
-				var isImportant = (variableEntry || {}).isImportant || false;
+  var fnRE = typeof functionRE === "string" ? new RegExp("\\b(" + functionRE + ")\\(") : functionRE
+  do {
+    var searchMatch = fnRE.exec(call)
+    if (!searchMatch) {
+      return expressions
+    }
+    if (searchMatch[1] === undefined) {
+      throw new Error("Missing the first couple of parenthesis to get the function identifier in " + functionRE)
+    }
+    var fn = searchMatch[1]
+    var startIndex = searchMatch.index
+    var matches = balanced("(", ")", call.substring(startIndex))
 
+    if (!matches) {
+      throw new SyntaxError(fn + "(): missing closing ')' in the value '" + call + "'")
+    }
 
-				// Add a root node to the AST
-				var variableRootRule = postcss.rule({ selector: ':root' });
-				css.root().prepend(variableRootRule);
-				// Add the variable decl to the root node
-				var varDecl = postcss.decl({
-					prop: variableName,
-					value: variableValue
-				});
-				varDecl.moveTo(variableRootRule);
+    expressions.push({matches: matches, functionIdentifier: fn})
+    call = matches.post
+  }
+  while (fnRE.test(call))
 
-				// Add the entry to the map
-				prevVariableMap[variableName] = (prevVariableMap[variableName] || []).concat({
-					decl: varDecl,
-					prop: variableName,
-					calculatedInPlaceValue: variableValue,
-					isImportant: isImportant,
-					variablesUsed: [],
-					parent: variableRootRule,
-					isUnderAtRule: false
-				});
+  return expressions
+}
 
-				return prevVariableMap;
-			}, {})
-		);
+/**
+ * Evaluates an expression
+ *
+ * @param {String} expression
+ * @returns {String}
+ * @api private
+ */
 
+function evalFunctionCall (string, functionIdentifier, callback, call, functionRE) {
+  // allow recursivity
+  return callback(reduceFunctionCall(string, functionRE, callback), functionIdentifier, call)
+}
 
-		// Chainable helper function to log any messages (warnings)
-		var logResolveValueResult = function(valueResult) {
-			// Log any warnings that might of popped up
-			var warningList = [].concat(valueResult.warnings);
-			warningList.forEach(function(warningArgs) {
-				warningArgs = [].concat(warningArgs);
-				result.warn.apply(result, warningArgs);
-			});
+},{"balanced-match":48}],"postcss-calc":[function(require,module,exports){
+/**
+ * Module dependencies.
+ */
+var reduceCSSCalc = require("reduce-css-calc")
+var helpers = require("postcss-message-helpers")
+var postcss = require("postcss")
 
-			// Keep the chain going
-			return valueResult;
-		};
+/**
+ * PostCSS plugin to reduce calc() function calls.
+ */
+module.exports = postcss.plugin("postcss-calc", function(options) {
+  options = options || {}
+  var precision = options.precision
+  var preserve = options.preserve
 
+  return function(style) {
+    style.walkDecls(function transformDecl(decl) {
+      if (!decl.value || decl.value.indexOf("calc(") === -1) {
+        return
+      }
 
-		// Collect all of the variables defined
-		// ---------------------------------------------------------
-		// ---------------------------------------------------------
-		eachCssVariableDeclaration(css, function(decl) {
-			var declParentRule = decl.parent;
+      helpers.try(function transformCSSCalc() {
+        var value = reduceCSSCalc(decl.value, precision)
 
-			var valueResults = logResolveValueResult(resolveValue(decl, map));
-			// Split out each selector piece into its own declaration for easier logic down the road
-			decl.parent.selectors.forEach(function(selector) {
-				// Create a detached clone
-				var splitOutRule = shallowCloneNode(decl.parent);
-				splitOutRule.selector = selector;
-				splitOutRule.parent = decl.parent.parent;
+        if (!preserve) {
+          decl.value = value
+          return
+        }
 
-				var declClone = decl.clone();
-				declClone.moveTo(splitOutRule);
+        if (value != decl.value) {
+          var clone = decl.clone()
+          clone.value = value
+          decl.parent.insertBefore(decl, clone)
+        }
+      }, decl.source)
+    })
+  }
+})
 
-				var prop = decl.prop;
-				map[prop] = (map[prop] || []).concat({
-					decl: declClone,
-					prop: prop,
-					calculatedInPlaceValue: valueResults.value,
-					isImportant: decl.important || false,
-					variablesUsed: valueResults.variablesUsed,
-					parent: splitOutRule,
-					// variables inside root or at-rules (eg. @media, @support)
-					isUnderAtRule: splitOutRule.parent.type === 'atrule'
-				});
-			});
-
-			// Remove the variable declaration because they are pretty much useless after we resolve them
-			if(!opts.preserve) {
-				decl.remove();
-			}
-			// Or we can also just show the computed value used for that variable
-			else if(opts.preserve === 'computed') {
-				decl.value = valueResults.value;
-			}
-			// Otherwise just keep them as var declarations
-			//else {}
-
-			// We add to the clean up list if we removed some variable declarations to make it become an empty rule
-			// We clean up later on because we don't want to modify the AST when we still need to reference these later on
-			if(declParentRule.nodes.length <= 0) {
-				nodesToRemoveAtEnd.push(declParentRule);
-			}
-		});
-
-
-
-
-
-		// Resolve variables everywhere
-		// ---------------------------------------------------------
-		// ---------------------------------------------------------
-
-		// Collect all the rules that have declarations that use variables
-		var rulesThatHaveDeclarationsWithVariablesList = [];
-		css.walkRules(function(rule) {
-			var doesRuleUseVariables = rule.nodes.some(function(node) {
-				if(node.type === 'decl') {
-					var decl = node;
-					// If it uses variables
-					// and is not a variable declarations that we may be preserving from earlier
-					if(resolveValue.RE_VAR_FUNC.test(decl.value) && !RE_VAR_PROP.test(decl.prop)) {
-						return true;
-					}
-				}
-
-				return false;
-			});
-
-			if(doesRuleUseVariables) {
-				rulesThatHaveDeclarationsWithVariablesList.push(rule);
-			}
-		});
-
-		rulesThatHaveDeclarationsWithVariablesList.forEach(function(rule) {
-			var rulesToWorkOn = [].concat(rule);
-			// Split out the rule into each comma separated selector piece
-			// We only need to split if is actually comma separted(selectors > 1)
-			if(rule.selectors.length > 1) {
-				// Reverse the selectors so that we can cloneAfter in the same comma separated order
-				rulesToWorkOn = rule.selectors.reverse().map(function(selector) {
-					var ruleClone = rule.cloneAfter();
-					ruleClone.selector = selector;
-
-					return ruleClone;
-				});
-
-				rule.remove();
-			}
-
-			// Resolve the declarations
-			rulesToWorkOn.forEach(function(ruleToWorkOn) {
-				ruleToWorkOn.nodes.slice(0).forEach(function(node) {
-					if(node.type === 'decl') {
-						var decl = node;
-						resolveDecl(decl, map, opts.preserve);
-					}
-				});
-			});
-
-		});
-
-
-
-
-
-		// Clean up any nodes we don't want anymore
-		// We clean up at the end because we don't want to modify the AST when we still need to reference these later on
-		nodesToRemoveAtEnd.forEach(cleanUpNode);
-
-
-		//console.log('map', map);
-
-		/* * /
-		}
-		catch(e) {
-			//console.log('e', e.message);
-			console.log('e', e.message, e.stack);
-		}
-		/* */
-
-	};
-});
-
-},{"./lib/resolve-decl":17,"./lib/resolve-value":18,"./lib/shallow-clone-node":19,"extend":21,"postcss":34}]},{},[]);
+},{"postcss":21,"postcss-message-helpers":8,"reduce-css-calc":47}]},{},[]);
