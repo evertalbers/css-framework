@@ -3,50 +3,33 @@
     <meta charset="utf-8">
     <meta content="noindex" name="robots">
 <link rel="stylesheet" href="http://fonts.int3.se/brick/sourcecodepro.css">
-<link rel="stylesheet" href="http://fonts.int3.se/brick/sourcesanspro.css">
-    <title>Autoprefixer</title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:700|Open+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="../../dist/framework.pkgd.css">
+    <link rel="stylesheet" href="../../dist/custom.css">
+    <title>Build tool (IE10)</title>
     <style>
         * {
             box-sizing: border-box;
         }
-        html,
-        body {
-            height: 100%;
-            margin:0;
-            font-family: sourcesanspro;
-        }
-        a {
-            color: #07c;
-        }
-        body {
-            font-family: sans-serif;
-        }
-        
         main {
             flex-grow: 1;
             display: flex;
             align-items: stretch;
             justify-content: space-between;
         }
-        main,aside,h1{
-        margin: 0 16px;
+        h2{
+        margin-left: 16px;
         }
         main > div {
             width: calc(50% - .5em);
             display: flex;
             flex-direction: column;
         }
-        main{height:100vh;}
+        header{height: 10vh;}
+        main{height:90vh;}
         
         h2 {
             font-size: 1.5em;
-        }
-        h2 em {
-            display: inline-block;
-            font-weight: bold;
-            background-color: black;
-            color: white;
-            padding: .3em .5em;
         }
         .io {
             resize: none;
@@ -55,45 +38,60 @@
             flex-direction: column;
             padding: .5em;
         }
-        .io p {
-            padding-bottom: .5em;
-        }
         .io textarea {
+            font-size: 14px;
             flex-grow: 1;
             resize: none;
             padding: .5em .8em;
             font-family: sourcecodepro;
         }
-        #lblInvalid {
-            display: none;
-            float: right;
-            color: red;
-            font-weight: bold;
-            padding: .4em .4em 0;
-        }
         .inactive {
             color: gray;
         }
-        aside {
-            display: flex;
-            align-items: baseline;
-        }
-        aside > * {
-            margin: 0 .15em;
-        }
-        #options {
-            padding: 2px 4px;
-            width: 300px;
-            flex-grow: 1;
-        }
-        footer p {
-            padding: .8em;
-            text-align: center;
-        }
     </style> </head> <body>
+    <header class="flex padding">
+        <div class="four m-six logo align center left">
+            <a href="../../">
+                    Flex framework
+                </a>
+        </div>
+        <ul class="menu eight m-six align center space-around">
+            <li class="dropdown">
+                <a href="../../#">Parts</a>
+                <ul>
+            
+                <li>
+                    <a href="../../#grid">Grid</a></li>
+                <li>
+                    <a href="../../#aligners">Aligners</a></li>
+                <li>
+                    <a href="../../#styling">General styling</a></li>
+                <li>
+                    <a href="../../#menu">Menu</a></li>
+
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="../../#examples">Examples</a>
+                <ul>
+                    <li>
+                        <a href="../../#aligned-columns">Aligned equal columns</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="../../#customization">Customization</a></li>
+            <li>
+                <a href="../../#compatability">Compatability</a></li>
+            <li>
+                <a href="https://github.com/SahAssar/css-framework/tree/gh-pages">Download</a></li>
+        </ul>
+        <div class="menu-icon-wrapper m-align m-center m-right">
+            <div id="menu-icon"><span class="first"></span><span class="second"></span><span class="third"></span></div>
+        </div>
+    </header>
     <main>
         <div class="part1">
-            <h2>Flex grid customization</h2>
+            <h2>Flex grid customization (IE10)</h2>
             <div class="io">
                 <textarea autofocus="" id="input" spellcheck="false"></textarea>
             </div>
