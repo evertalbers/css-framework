@@ -2,8 +2,8 @@
 /* Customizable variables */
 
 :root {
-    --padding: 1em;
-    --margin: 1em;
+    --padding: 1em; /* Must not be a percentage, but can be any other valid CSS value */
+    --margin: 1em; /* Must not be a percentage, but can be any other valid CSS value */
     --breakpoint-m: 1100px;
     --breakpoint-s: 800px;
     --breakpoint-xs: 500px;
