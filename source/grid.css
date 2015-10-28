@@ -1,15 +1,31 @@
-/* Flex grid/framework */
-/* Customizable variables */
+/*
+ *
+ *
+ * Start of Customizable variables
+ *
+ *
+*/
 
 :root {
-    --padding: 1em; /* Must not be a percentage, but can be any other valid CSS value */
-    --margin: 1em; /* Must not be a percentage, but can be any other valid CSS value */
+    --padding: 1%; /* Must be a percentage value if you want IE10 compatability */
+    --margin: 1%; /* Must be a percentage value if you want IE10 compatability */
+    --vertical-padding: 1em; /* must NOT be a percentage value for compatability with proper specs and firefox */
+    --vertical-margin: 1em; /* must NOT be a percentage value for compatability with proper specs and firefox */
     --breakpoint-m: 1100px;
     --breakpoint-s: 800px;
     --breakpoint-xs: 500px;
     --breakpoint-menu: 1100px;
     --container-max-width: 1100px;
+    --fixed-header-height: 10vh;
 }
+
+/*
+ *
+ *
+ * End of Customizable variables
+ *
+ *
+*/
 
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 
@@ -649,8 +665,8 @@ input[type=radio] {
     flex-direction: row;
 }
 
-.padding>* { padding: var(--padding) }
-.margin>* { margin: var(--margin) }
+.padding>* { padding: var(--vertical-padding) var(--padding) }
+.margin>* { margin: var(--vertical-margin) var(--margin) }
 
 .no-grow { flex-grow: 0 }
 .no-shrink { flex-shrink: 0 }
@@ -1043,13 +1059,13 @@ input[type=radio] {
 header { position: relative }
 header .menu { top: 100% }
 
-body.fixed { border-top: 10vh solid }
+body.fixed { border-top: var(--fixed-header-height) solid }
 body.fixed header {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    min-height: 10vh;
+    min-height: var(--fixed-header-height);
 }
 
 .menu li,
