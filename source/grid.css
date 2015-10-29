@@ -653,6 +653,7 @@ input[type=radio] {
 .flex { display: flex }
 
 .flex>* {
+    max-width:100%;
     box-sizing: content-box;
     flex-grow: 1;
     flex-shrink: 1;
@@ -758,6 +759,7 @@ input[type=radio] {
     .m-flex { display: flex }
 
     .m-flex>* {
+        max-width:100%;
         box-sizing: content-box;
         flex-grow: 1;
         flex-shrink: 1;
@@ -858,6 +860,7 @@ input[type=radio] {
     .s-flex { display: flex }
 
     .s-flex>* {
+        max-width:100%;
         box-sizing: content-box;
         flex-grow: 1;
         flex-shrink: 1;
@@ -961,6 +964,7 @@ input[type=radio] {
     .xs-flex { display: flex }
 
     .xs-flex>* {
+        max-width:100%;
         box-sizing: content-box;
         flex-grow: 1;
         flex-shrink: 1;
