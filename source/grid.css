@@ -537,7 +537,8 @@ table {
 }
 
 fieldset {
-    border: none
+    border: none;
+    min-width: 0px
 }
 
 button,
@@ -608,7 +609,8 @@ textarea {
     border: 1px solid #ccc;
     margin-bottom: 1em;
     padding: .3em .5em;
-    border-radius: .2em
+    border-radius: .2em;
+    max-width: 100%
 }
 
 input[type=checkbox],

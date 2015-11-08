@@ -6,6 +6,17 @@ body {
     background: #FDFDFA;
 }
 
+h1,
+h2,
+h3,
+h4 {
+    font-family: "Montserrat", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+header {
+    background: #FDFDFA;
+}
+
 h1 {
     font-size: 3.8125rem;
     line-height: 4.6875rem;
@@ -23,7 +34,7 @@ h2 {
 }
 
 * + h2 {
-    margin-top: 4.6875rem;
+    margin-top: 2.6875rem;
 }
 
 h3 {
@@ -46,13 +57,20 @@ h4 {
     margin-top: 1.5625rem;
 }
 
-h1,
-h2,
-h3,
-h4 {
-    font-family: "Montserrat", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-header {
-    background: #FDFDFA;
+@media(max-width:800px) {
+    h1 {
+        font-size: 2.1875rem;
+        line-height: 3.125rem;
+    }
+    h2 {
+        font-size: 1.4375rem;
+        line-height: 1.5625rem;
+    }
+    h3 {
+        font-size: 1.3875rem;
+        line-height: 2.125rem;
+    }
+    h4 {
+        font-size: 1.125rem;
+    }
 }
