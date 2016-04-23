@@ -1,0 +1,18 @@
+/*!
+ *! Imports and variables
+ *! base.css
+ *!
+ */
+
+:root {
+    --padding: 1%; /* Must be a percentage value if you want IE10 compatability */
+    --margin: 1%; /* Must be a percentage value if you want IE10 compatability */
+    --vertical-padding: 1em; /* must NOT be a percentage value for compatability with proper specs and firefox */
+    --vertical-margin: 1em; /* must NOT be a percentage value for compatability with proper specs and firefox */
+    --breakpoint-m: 1100px;
+    --breakpoint-s: 800px;
+    --breakpoint-xs: 500px;
+    --breakpoint-menu: 1100px;
+    --container-max-width: 1100px;
+    --fixed-header-height: 10vh;
+}
