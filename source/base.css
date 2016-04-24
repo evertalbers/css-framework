@@ -4,11 +4,11 @@
  *
  */
  
-@import '/source/normalize.css';
-@import '/source/general_styling.css';
-@import '/source/grid.css';
-@import '/source/aligners.css';
-@import '/source/menu.css';
+@import '../source/normalize.css';
+@import '../source/general_styling.css';
+@import '../source/grid.css';
+@import '../source/aligners.css';
+@import '../source/menu.css';
 
 :root {
     /* general_styling settings */
