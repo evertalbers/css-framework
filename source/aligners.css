@@ -1,0 +1,95 @@
+/*! 
+ *! Flex aligners
+ *! aligners.css
+ *!
+ */
+
+.align { display: flex }
+
+.center {
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.bottom,
+.top,
+.left,
+.right,
+.space-around,
+.space-between { flex-direction: row }
+.right { justify-content: flex-end }
+.left { justify-content: flex-start }
+.top { align-items: flex-start }
+.bottom { align-items: flex-end }
+.space-around { justify-content: space-around }
+.space-between { justify-content: space-between }
+
+@media(max-width: var(--breakpoint-m)) {
+    .m-align { display: flex }
+
+    .m-center {
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .m-bottom,
+    .m-top,
+    .m-left,
+    .m-right,
+    .m-space-around,
+    .m-space-between { flex-direction: row }
+    .m-right { justify-content: flex-end }
+    .m-left { justify-content: flex-start }
+    .m-top { align-items: flex-start }
+    .m-bottom { align-items: flex-end }
+    .m-space-around { justify-content: space-around }
+    .m-space-between { justify-content: space-between }
+}
+
+@media(max-width: var(--breakpoint-s)) {
+    .s-align { display: flex }
+
+    .s-center {
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .s-bottom,
+    .s-top,
+    .s-left,
+    .s-right,
+    .s-space-around,
+    .s-space-between { flex-direction: row }
+    .s-right { justify-content: flex-end }
+    .s-left { justify-content: flex-start }
+    .s-top { align-items: flex-start }
+    .s-bottom { align-items: flex-end }
+    .s-space-around { justify-content: space-around }
+    .s-space-between { justify-content: space-between }
+}
+
+@media(max-width: var(--breakpoint-xs)) {
+    .xs-align { display: flex }
+
+    .xs-center {
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .xs-bottom,
+    .xs-top,
+    .xs-left,
+    .xs-right,
+    .xs-space-around,
+    .xs-space-between { flex-direction: row }
+    .xs-right { justify-content: flex-end }
+    .xs-left { justify-content: flex-start }
+    .xs-top { align-items: flex-start }
+    .xs-bottom { align-items: flex-end }
+    .xs-space-around { justify-content: space-around }
+    .xs-space-between { justify-content: space-between }
+}
