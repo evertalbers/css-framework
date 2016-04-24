@@ -33,6 +33,7 @@
 .no-grow { flex-grow: 0 }
 .no-shrink { flex-shrink: 0 }
 .col { flex-direction: column }
+.row { flex-direction: row }
 
 .center {
     justify-content: center;
@@ -136,6 +137,7 @@
     .m-no-grow { flex-grow: 0 }
     .m-no-shrink { flex-shrink: 0 }
     .m-col { flex-direction: column }
+    .m-row { flex-direction: row }
 
     .m-center {
         justify-content: center;
@@ -237,6 +239,7 @@
     .s-no-grow { flex-grow: 0 }
     .s-no-shrink { flex-shrink: 0 }
     .s-col { flex-direction: column }
+    .s-row { flex-direction: row }
 
     .s-center {
         justify-content: center;
@@ -341,6 +344,7 @@
     .xs-no-grow { flex-grow: 0 }
     .xs-no-shrink { flex-shrink: 0 }
     .xs-col { flex-direction: column }
+    .xs-row { flex-direction: row }
 
     .xs-center {
         justify-content: center;
