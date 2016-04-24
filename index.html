@@ -7,13 +7,11 @@
     <title>Flex grid</title>
     <meta name="description" content="Flex grid documentation">
     <link href='https://fonts.googleapis.com/css?family=Montserrat:700|Open+Sans:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="dist/framework.pkgd.css">
-    <link rel="stylesheet" href="dist/custom.css">
+    <link rel="stylesheet" href="source/base.css">
     <style>
         .example div,
         code {
             background: #eee;
-            text-align: center
         }
         
         code {
@@ -35,7 +33,6 @@
         }
         
         pre {
-            text-align: left !important;
             max-width: 800px;
             margin: 0 auto;
         }
@@ -55,338 +52,360 @@
         .example .align.twelve p {
             width: 300px;
         }
-        
-        body>*,
-        body,
-        #examples>h2 {
-            text-align: center;
-        }
-        
-        body>*>* {
-            text-align: left;
-        }
-        
-        #examples>h2,
-        body>h1 {
-            border-bottom: 3px solid;
-        }
+
+		.example.grid div{
+			text-align:center;
+			box-shadow: inset 0 0 1px #444;
+		}
+
+		body {
+			font-family: "Open Sans", "HelveticaNeue", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+			color: #444;
+			background: #FDFDFA;
+			line-height: 1.6;
+			font-size: 18px;
+			padding: 10px;
+		}
+		nav{
+			position:fixed;
+		}
+
+		h1,
+		h2,
+		h3,
+		h4 {
+			line-height:1.2;
+			font-family: "Montserrat", HelveticaNeue, "Helvetica Neue", Helvetica, Arial, sans-serif;
+		}
     </style>
 </head>
 
 <body>
-    <header class="flex padding">
-        <div class="four m-six logo align center left">
-            <a href="/">
+	<div class="flex">
+		<div class="two m-three">
+			<nav>
+				<a href="/" class="navheader">
                     Flex framework
                 </a>
-        </div>
-        <ul class="menu eight m-six align center space-around">
-            <li class="dropdown">
-                <a href="#">Parts</a>
-                <ul>
-            
-                <li>
-                    <a href="#grid">Grid</a></li>
-                <li>
-                    <a href="#aligners">Aligners</a></li>
-                <li>
-                    <a href="#styling">General styling</a></li>
-                <li>
-                    <a href="#menu">Menu</a></li>
+				<ul>
+					<li>
+						<a href="#">Intro & Compatability</a>
+					<li>
+						<a href="#">Parts</a>
+						<ul>
+					
+						<li>
+							<a href="#grid">Grid</a></li>
+						<li>
+							<a href="#aligners">Aligners</a></li>
+						<li>
+							<a href="#styling">General styling</a></li>
+						<li>
+							<a href="#menu">Menu</a></li>
 
-                </ul>
-            </li>
-            <li class="dropdown">
-                <a href="#examples">Examples</a>
-                <ul>
-                    <li>
-                        <a href="#aligned-columns">Aligned equal columns</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#customization">Customization</a></li>
-            <li>
-                <a href="#compatability">Compatability</a></li>
-            <li>
-                <a href="https://github.com/SahAssar/css-framework/tree/gh-pages">Download</a></li>
-        </ul>
-        <div class="menu-icon-wrapper m-align m-center m-right">
-            <div id="menu-icon"><span class="first"></span><span class="second"></span><span class="third"></span></div>
-        </div>
-    </header>
-    <h1 id="grid">Grid</h1>
-    <p>The base grid is constructed with a container with the class <code>flex</code>, which then contains columns with classes <code>one</code> through <code>twelve</code>, or the additional class <code>fifth</code></p>
-    <button class="toggle-margin">Toggle margin class on grid</button>
-    <button class="toggle-padding">Toggle padding class on grid</button>
-    <div class="flex padding margin example">
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="one"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="two"></div>
-        <div class="fifth"></div>
-        <div class="fifth"></div>
-        <div class="fifth"></div>
-        <div class="fifth"></div>
-        <div class="fifth"></div>
-        <div class="three"></div>
-        <div class="three"></div>
-        <div class="three"></div>
-        <div class="three"></div>
-        <div class="four"></div>
-        <div class="four"></div>
-        <div class="four"></div>
-        <div class="five"></div>
-        <div class="two"></div>
-        <div class="five"></div>
-        <div class="six"></div>
-        <div class="six"></div>
-        <div class="seven"></div>
-        <div class="five"></div>
-        <div class="eight"></div>
-        <div class="four"></div>
-        <div class="nine"></div>
-        <div class="three"></div>
-        <div class="ten"></div>
-        <div class="two"></div>
-        <div class="eleven"></div>
-        <div class="one"></div>
-    </div>
-    <p>There are a few aditional classes in the grid, these are:</p>
-    <dl>
-        <dt><code>margin</code></dt>
-        <dd>Give all columns a margin of 1em</dd>
-        <dt><code>padding</code></dt>
-        <dd>Give all columns a padding of 1em</dd>
-        <dt><code>col</code></dt>
-        <dd>Switch the grid to vertical layout, see the <a href="#aligned-columns">Aligned equal columns</a> example.</dd>
-    </dl>
-    <p>And these can be used on the columns themselves:</p>
-    <dl>
-        <dt><code>no-grow</code></dt>
-        <dd>The element will not grow to fill available space</dd>
-        <dt><code>no-shrink</code></dt>
-        <dd>the element will not reliquish space to allow other elements to grow</dd>
-    </dl>
-    <p>All flex and aligner related classes have three breakpoints which are used with prefixes:</p>
-    <dl>
-        <dt><code>.m-</code></dt>
-        <dd>Breakpoint at 1100px, example: <code>.m-six</code></dd>
-        <dt><code>.s-</code></dt>
-        <dd>Breakpoint at 800px, example: <code>.s-six</code></dd>
-        <dt><code>.xs-</code></dt>
-        <dd>Breakpoint at 500px, example: <code>.xs-six</code></dd>
-    </dl>
-    <p>Example:</p>
-    <div class="flex padding margin example">
-        <div class="three m-four s-six xs-twelve no-grow">three m-four s-six xs-twelve no-grow</div>
-        <div class="three m-four s-six xs-twelve no-grow">three m-four s-six xs-twelve no-grow</div>
-        <div class="three m-four s-six xs-twelve no-grow">three m-four s-six xs-twelve no-grow</div>
-        <div class="three m-four s-six xs-twelve no-grow">three m-four s-six xs-twelve no-grow</div>
-    </div>
-    <h1 id="aligners">Aligners</h1>
-    <div class="flex margin padding example">
-        <div class="four align top left">align top left</div>
-        <div class="four align top center">align top center</div>
-        <div class="four align top right">align top right</div>
-        <div class="four align center left">align center left</div>
-        <div class="four align center">align center</div>
-        <div class="four align center right">align center right</div>
-        <div class="four align bottom left">align bottom left</div>
-        <div class="four align bottom center">align bottom center</div>
-        <div class="four align bottom right">align bottom right</div>
-        <div class="twelve align bottom right m-center s-top s-left">
-            <p>Since the aligners have the same breakpoints as the grid you can easily move the content at different screensizes. This text will start on the bottom right, and move to center and then to top left as window size changes. The classes for this are <code>align bottom right m-center s-top s-left</code></p>
-        </div>
-    </div>
-    <p></p>
-    <h1 id="styling">General styling</h1>
-    <p>All colors and fontsizes are controlled in a file called custom.css. I recommend that you use a tool such as <a href="http://www.gridlover.net/app/">gridlover</a> to generate fontsizes for your site.</p>
-    <div class="container">
-        <h1>This is &lt;h1&gt;</h1>
-        <h2>This is &lt;h2&gt;</h2>
-        <h3>This is &lt;h3&gt;</h3>
-        <h4>This is &lt;h4&gt;</h4>
-        <p><a href="#">Lorem ipsum</a> dolor <b>sit amet</b>, consectetur <i>adipiscing elit</i>. Integer rhoncus in felis sed eleifend. Nam posuere lectus arcu, malesuada lobortis lectus sollicitudin vitae. In nec euismod metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cras et nisl metus. Suspendisse potenti. Curabitur mattis molestie consectetur. Sed mollis leo ac purus fermentum, sit amet tempus ligula mollis. Mauris a justo justo. Integer pellentesque nisi vitae urna feugiat ullamcorper. Maecenas nec leo rutrum, rhoncus orci ac, mattis tortor.</p>
+						</ul>
+					</li>
+					<li>
+						<a href="#examples">Examples</a>
+						<ul>
+							<li>
+								<a href="#aligned-columns">Aligned equal columns</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="#customization">Customization</a></li>
+					<li>
+						<a href="https://github.com/SahAssar/css-framework/tree/gh-pages">Download</a></li>
+				</ul>
+			</nav>
+		</div>
+		<div class="ten m-nine">
+			<h1 id="grid">Intro & Compatability</h1>
+			<p>This framework is based around a number of components that can each be used by themselves or as group. These components are:</p>
+			<ul>
+				<li>Grid</li>
+				<li>Aligners</li>
+				<li>General Styling</li>
+				<li>Activestates (tabs)</li>
+				<li>Menus</li>
+			</ul>
+			<p>In addition to these we usually use normalize.css as our reset and <a href="https://github.com/peduarte/wallop">wallop</a> or <a href="https://github.com/kenwheeler/slick">slick</a> as a carousel.</p>
+			<h2>Compatability</h2>
+			<p>The components are compatible with modern browsers (IE11+). It is tested on:</p>
+				<ul>
+					<li>IE11 (IE10 as long as you use percentages for horizontal paddings/margins for the grid)</li>
+					<li>Edge 12, 13</li>
+					<li>Safari 8, 9</li>
+					<li>Chrome</li>
+					<li>Firefox</li>
+				</ul>
+			<h1 id="grid">Grid</h1>
+			<p>The base grid is constructed with a container with the class <code>flex</code>, which then contains columns with classes <code>one</code> through <code>twelve</code>, or the additional class <code>fifth</code></p>
+			<button class="toggle-margin">Toggle margin class on grid</button>
+			<button class="toggle-padding">Toggle padding class on grid</button>
+			<div class="flex padding margin example grid">
+				<div class="one"></div>
+				<div class="one"></div>
+				<div class="one"></div>
+				<div class="one"></div>
+				<div class="one"></div>
+				<div class="one"></div>
+				<div class="one"></div>
+				<div class="one"></div>
+				<div class="one"></div>
+				<div class="one"></div>
+				<div class="one"></div>
+				<div class="one"></div>
+				<div class="two"></div>
+				<div class="two"></div>
+				<div class="two"></div>
+				<div class="two"></div>
+				<div class="two"></div>
+				<div class="two"></div>
+				<div class="fifth"></div>
+				<div class="fifth"></div>
+				<div class="fifth"></div>
+				<div class="fifth"></div>
+				<div class="fifth"></div>
+				<div class="three"></div>
+				<div class="three"></div>
+				<div class="three"></div>
+				<div class="three"></div>
+				<div class="four"></div>
+				<div class="four"></div>
+				<div class="four"></div>
+				<div class="five"></div>
+				<div class="two"></div>
+				<div class="five"></div>
+				<div class="six"></div>
+				<div class="six"></div>
+				<div class="seven"></div>
+				<div class="five"></div>
+				<div class="eight"></div>
+				<div class="four"></div>
+				<div class="nine"></div>
+				<div class="three"></div>
+				<div class="ten"></div>
+				<div class="two"></div>
+				<div class="eleven"></div>
+				<div class="one"></div>
+			</div>
+			<p>There are a few aditional classes in the grid, these are:</p>
+			<dl>
+				<dt><code>margin</code></dt>
+				<dd>Give all columns a margin of 1em</dd>
+				<dt><code>padding</code></dt>
+				<dd>Give all columns a padding of 1em</dd>
+				<dt><code>col</code></dt>
+				<dd>Switch the grid to vertical layout, see the <a href="#aligned-columns">Aligned equal columns</a> example.</dd>
+			</dl>
+			<p>And these can be used on the columns themselves:</p>
+			<dl>
+				<dt><code>no-grow</code></dt>
+				<dd>The element will not grow to fill available space</dd>
+				<dt><code>no-shrink</code></dt>
+				<dd>the element will not reliquish space to allow other elements to grow</dd>
+			</dl>
+			<p>All flex and aligner related classes have three breakpoints which are used with prefixes:</p>
+			<dl>
+				<dt><code>.m-</code></dt>
+				<dd>Breakpoint at 1100px, example: <code>.m-six</code></dd>
+				<dt><code>.s-</code></dt>
+				<dd>Breakpoint at 800px, example: <code>.s-six</code></dd>
+				<dt><code>.xs-</code></dt>
+				<dd>Breakpoint at 500px, example: <code>.xs-six</code></dd>
+			</dl>
+			<p>Example:</p>
+			<div class="flex padding margin example">
+				<div class="three m-four s-six xs-twelve no-grow">three m-four s-six xs-twelve no-grow</div>
+				<div class="three m-four s-six xs-twelve no-grow">three m-four s-six xs-twelve no-grow</div>
+				<div class="three m-four s-six xs-twelve no-grow">three m-four s-six xs-twelve no-grow</div>
+				<div class="three m-four s-six xs-twelve no-grow">three m-four s-six xs-twelve no-grow</div>
+			</div>
+			<h1 id="aligners">Aligners</h1>
+			<div class="flex margin padding example">
+				<div class="four align top left">align top left</div>
+				<div class="four align top center">align top center</div>
+				<div class="four align top right">align top right</div>
+				<div class="four align center left">align center left</div>
+				<div class="four align center">align center</div>
+				<div class="four align center right">align center right</div>
+				<div class="four align bottom left">align bottom left</div>
+				<div class="four align bottom center">align bottom center</div>
+				<div class="four align bottom right">align bottom right</div>
+				<div class="twelve align bottom right m-center s-top s-left">
+					<p>Since the aligners have the same breakpoints as the grid you can easily move the content at different screensizes. This text will start on the bottom right, and move to center and then to top left as window size changes. The classes for this are <code>align bottom right m-center s-top s-left</code></p>
+				</div>
+			</div>
+			<p></p>
+			<h1 id="styling">General styling</h1>
+			<p>All colors and fontsizes are controlled in a file called custom.css. I recommend that you use a tool such as <a href="http://www.gridlover.net/app/">gridlover</a> to generate fontsizes for your site.</p>
+			<div class="container">
+				<h1>This is &lt;h1&gt;</h1>
+				<h2>This is &lt;h2&gt;</h2>
+				<h3>This is &lt;h3&gt;</h3>
+				<h4>This is &lt;h4&gt;</h4>
+				<p><a href="#">Lorem ipsum</a> dolor <b>sit amet</b>, consectetur <i>adipiscing elit</i>. Integer rhoncus in felis sed eleifend. Nam posuere lectus arcu, malesuada lobortis lectus sollicitudin vitae. In nec euismod metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Cras et nisl metus. Suspendisse potenti. Curabitur mattis molestie consectetur. Sed mollis leo ac purus fermentum, sit amet tempus ligula mollis. Mauris a justo justo. Integer pellentesque nisi vitae urna feugiat ullamcorper. Maecenas nec leo rutrum, rhoncus orci ac, mattis tortor.</p>
 
-        <p>Donec at pellentesque nulla. Sed metus velit, faucibus eu magna sed, porta pretium arcu. Etiam vel pharetra arcu. Mauris vel viverra sem. Donec commodo ultrices orci eget molestie. Morbi elementum ante a erat mollis, vitae molestie velit malesuada. Phasellus vel fringilla augue. Integer et ex sed est tempus aliquam. Nunc vehicula finibus urna, vel cursus nunc pellentesque vel. Nunc pharetra mauris nec dignissim sagittis.</p>
-        <h2>Forms</h2>
-        <p>
-            Here is a simple form:
-        </p>
-        <form method="get" action="#">
-            <fieldset>
-                <label for="email">Your email:</label>
-                <input name="email" type="text" id="email" size="25" placeholder="must be unique" />
-                <label for="sex">Your gender:</label>
-                <select name="sex" id="sex">
-                    <option value="none">don't want to say</option>
-                    <option value="female">female</option>
-                    <option value="male">male</option>
-                </select>
-                <input type="radio" id="under" name="age" />
-                <label for="under">I'm under 18</label>
-                <input type="radio" id="over" name="age" />
-                <label for="over">I'm over 18</label>
-                <label for="address">Your full address:</label>
-                <textarea name="address" id="address" cols="40" rows="3" placeholder="PO box is not allowed"></textarea>
-                <input type="checkbox" name="consent" id="consent" value="test" />
-                <label for="consent">I agree with all possible terms and conditions</label>
-                <button type="submit">Subscribe</button>
-                <button type="reset">Reset</button>
-                <button disabled>Can't click</button>
-                <a class="button" href="#">Class button</a>
-            </fieldset>
-        </form>
-        <h2>Tables</h2>
-        <p>
-            A simple table would look like this:
-        </p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Make</th>
-                    <th>Price</th>
-                    <th>Year</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>BMW X6</td>
-                    <td>$75,000</td>
-                    <td>2013</td>
-                </tr>
-                <tr>
-                    <td>Mercedes-Benz E350</td>
-                    <td>$52,700</td>
-                    <td>2014</td>
-                </tr>
-            </tbody>
-        </table>
-        <h2>Lists</h2>
-        <p>Just use standard <code>&lt;ul&gt;</code> and <code>&lt;ol&gt;</code> tags:</code>
-            <ul>
-                <li>Orange</li>
-                <li>
-                    Apple
-                    <ol>
-                        <li>First</li>
-                        <li>
-                            Second
-                            <ul>
-                                <li>Blue</li>
-                                <li>Yellow</li>
-                                <li>Green</li>
-                                <li>Red</li>
-                            </ul>
-                        </li>
-                        <li>Third</li>
-                    </ol>
-                </li>
-                <li>Appricot</li>
-            </ul>
-    </div>
-    <h1 id="menu">Menu</h1>
-    <p>The grid comes with a basic menu, that is either fixed by adding the class <code>fixed</code> on the <code>body</code> element, or static (default).
-        <br>
-        <button class="toggle-fixed">Toggle fixed menu</button>
-        <br> The standard HTML for a header with menu looks like this:
-    </p>
-    <pre>
-&lt;header class=&quot;flex padding&quot;&gt;
-    &lt;div class=&quot;four m-six logo align center left&quot;&gt;
-        &lt;a href=&quot;/&quot;&gt;
-                Home
-            &lt;/a&gt;
-    &lt;/div&gt;
-    &lt;ul class=&quot;menu eight m-six align center space-around&quot;&gt;
-        &lt;li&gt;
-            &lt;a href=&quot;#one&quot;&gt;Item one&lt;/a&gt;&lt;/li&gt;
-        &lt;li class=&quot;dropdown&quot;&gt;
-            &lt;a href=&quot;#two&quot;&gt;Item two&lt;/a&gt;
-            &lt;ul&gt;
-                &lt;li&gt;
-                    &lt;a href=&quot;#&quot;&gt;Sub 1&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;
-                    &lt;a href=&quot;#&quot;&gt;Sub 2&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;
-                    &lt;a href=&quot;#&quot;&gt;Sub 3&lt;/a&gt;&lt;/li&gt;
-                &lt;li&gt;
-                    &lt;a href=&quot;#&quot;&gt;Sub 4&lt;/a&gt;&lt;/li&gt;
-            &lt;/ul&gt;
-        &lt;/li&gt;
-        &lt;li&gt;
-            &lt;a href=&quot;#three&quot;&gt;Item three&lt;/a&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-    &lt;div class=&quot;menu-icon-wrapper m-align m-center m-right&quot;&gt;
-        &lt;div id=&quot;menu-icon&quot;&gt;
-            &lt;span class=&quot;first&quot;&gt;&lt;/span&gt;
-            &lt;span class=&quot;second&quot;&gt;&lt;/span&gt;
-            &lt;span class=&quot;third&quot;&gt;&lt;/span&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/header&gt;
-    </pre>
-    <p>The JS for opening the menu on mobile/tablet is just four lines (no dependencies):</p>
-    <pre>
-document.querySelector("#menu-icon").addEventListener("click", function () {
-    document.querySelector("ul.menu").classList.toggle("show");
-    document.querySelector("#menu-icon").classList.toggle("active");
-});
-    </pre>
-    <h1 id="compatability">Compatability</h1>
-    <p>The grid is compatible with modern browsers (IE11+). It is tested on:</p>
-        <p>IE11
-        <br>Edge 12
-        <br>Safari 8, 9
-        <br>Latest Chrome
-        <br>Latest Firefox</p>
-    <p>IE10 support works as long as you use percentages for horizontal paddings/margins.</p>
-    <h1 id="customization">Customization</h1>
-    <p>You can customize the grid <a href="http://sahassar.github.io/css-framework/build/">here</a>
-    </p>
-    <div id="examples">
-        <h2 id="aligned-columns">Example: Equal colums with aligned footer:</h2>
-        <div class="flex margin padding">
-            <div class="four m-six s-twelve flex margin col">
-                <div class="no-grow align center">
-                    <h2 class="no-grow align center">Damn that dog</h2></div>
-                <p>Damn that dog . Curl into a furry donut chirp at birds and knock dish off table head butt cant eat out of my own dish steal the warm chair right after you get up so lick arm hair curl into a furry donut. Behind the couch knock over christmas tree i am the best mew, yet eat prawns daintily with a claw then lick paws clean wash down prawns with a lap of carnation milk then retire to the warmest spot on the couch to claw at the fabric before taking a catnap but present belly, scratch hand when stroked. Bathe private parts with tongue then lick owner's face run in circles. Use lap as chair spread kitty litter all over house yet burrow under covers all of a sudden cat goes crazy fall over dead (not really but gets sypathy), so loves cheeseburgers but make meme, make cute face. Unwrap toilet paper meow pee in the shoe. Stare at the wall, play with food and get confused by dust stare at the wall, play with food and get confused by dust, chase imaginary bugs, so poop on grasses give attitude, or chase laser pelt around the house and up and down stairs chasing phantoms. Play time. </p>
-                <div class="no-grow align center">
-                    <a href="#" class="button">Read more...</a>
-                </div>
-            </div>
-            <div class="four m-six s-twelve flex margin col">
-                <div class="no-grow align center">
-                    <h2>percolator seasonal</h2></div>
-                <p>Eu strong spoon percolator seasonal so grounds lungo medium espresso galão. Sweet redeye instant caramelization beans brewed aftertaste rich. Crema froth, foam extra, beans, doppio, frappuccino americano viennese organic extraction. Cultivar coffee extra percolator cultivar grounds medium that galão. And, id, aftertaste, breve, whipped macchiato aromatic americano ristretto. White plunger pot pumpkin spice, qui eu, sweet, and aroma sugar chicory carajillo variety.</p>
-                <div class="no-grow align center">
-                    <a href="#" class="button">Read more...</a>
-                </div>
-            </div>
-            <div class="four m-six s-twelve flex margin col">
-                <div class="no-grow align center">
-                    <h2 class="no-grow align center">rump swine</h2></div>
-                <p>Bacon ipsum dolor amet rump swine pastrami shankle. Boudin frankfurter capicola, jowl meatball beef bresaola ground round kevin brisket picanha chuck. Leberkas turkey ball tip kielbasa swine drumstick biltong doner beef ribs pork belly cow kevin turducken frankfurter. Brisket capicola rump jowl chicken cow tri-tip turkey. Pork loin corned beef jerky leberkas chicken tail pork chop pork belly ground round shankle bacon hamburger landjaeger kevin. Tenderloin leberkas ribeye chicken pancetta brisket picanha, porchetta short loin meatloaf kevin tail turkey strip steak jowl. Jerky sausage spare ribs, ball tip biltong beef tongue fatback short loin boudin leberkas strip steak cow..</p>
-                <div class="no-grow align center">
-                    <a href="#" class="button">Read more...</a>
-                </div>
-            </div>
-        </div>
-    </div>
+				<p>Donec at pellentesque nulla. Sed metus velit, faucibus eu magna sed, porta pretium arcu. Etiam vel pharetra arcu. Mauris vel viverra sem. Donec commodo ultrices orci eget molestie. Morbi elementum ante a erat mollis, vitae molestie velit malesuada. Phasellus vel fringilla augue. Integer et ex sed est tempus aliquam. Nunc vehicula finibus urna, vel cursus nunc pellentesque vel. Nunc pharetra mauris nec dignissim sagittis.</p>
+				<h2>Forms</h2>
+				<p>
+					Here is a simple form:
+				</p>
+				<form method="get" action="#">
+					<fieldset>
+						<label for="email">Your email:</label>
+						<input name="email" type="text" id="email" size="25" placeholder="must be unique" />
+						<label for="sex">Your gender:</label>
+						<select name="sex" id="sex">
+							<option value="none">don't want to say</option>
+							<option value="female">female</option>
+							<option value="male">male</option>
+						</select>
+						<input type="radio" id="under" name="age" />
+						<label for="under">I'm under 18</label>
+						<input type="radio" id="over" name="age" />
+						<label for="over">I'm over 18</label>
+						<label for="address">Your full address:</label>
+						<textarea name="address" id="address" cols="40" rows="3" placeholder="PO box is not allowed"></textarea>
+						<input type="checkbox" name="consent" id="consent" value="test" />
+						<label for="consent">I agree with all possible terms and conditions</label>
+						<button type="submit">Subscribe</button>
+						<button type="reset">Reset</button>
+						<button disabled>Can't click</button>
+						<a class="button" href="#">Class button</a>
+					</fieldset>
+				</form>
+				<h2>Tables</h2>
+				<p>
+					A simple table would look like this:
+				</p>
+				<table>
+					<thead>
+						<tr>
+							<th>Make</th>
+							<th>Price</th>
+							<th>Year</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>BMW X6</td>
+							<td>$75,000</td>
+							<td>2013</td>
+						</tr>
+						<tr>
+							<td>Mercedes-Benz E350</td>
+							<td>$52,700</td>
+							<td>2014</td>
+						</tr>
+					</tbody>
+				</table>
+				<h2>Lists</h2>
+				<p>Just use standard <code>&lt;ul&gt;</code> and <code>&lt;ol&gt;</code> tags:</code>
+					<ul>
+						<li>Orange</li>
+						<li>
+							Apple
+							<ol>
+								<li>First</li>
+								<li>
+									Second
+									<ul>
+										<li>Blue</li>
+										<li>Yellow</li>
+										<li>Green</li>
+										<li>Red</li>
+									</ul>
+								</li>
+								<li>Third</li>
+							</ol>
+						</li>
+						<li>Appricot</li>
+					</ul>
+			</div>
+			<h1 id="menu">Menu</h1>
+			<p>The grid comes with a basic menu, that is either fixed by adding the class <code>fixed</code> on the <code>body</code> element, or static (default).
+				<br>
+				<button class="toggle-fixed">Toggle fixed menu</button>
+				<br> The standard HTML for a header with menu looks like this:
+			</p>
+			<pre>
+		&lt;header class=&quot;flex padding&quot;&gt;
+			&lt;div class=&quot;four m-six logo align center left&quot;&gt;
+				&lt;a href=&quot;/&quot;&gt;
+						Home
+					&lt;/a&gt;
+			&lt;/div&gt;
+			&lt;ul class=&quot;menu eight m-six align center space-around&quot;&gt;
+				&lt;li&gt;
+					&lt;a href=&quot;#one&quot;&gt;Item one&lt;/a&gt;&lt;/li&gt;
+				&lt;li class=&quot;dropdown&quot;&gt;
+					&lt;a href=&quot;#two&quot;&gt;Item two&lt;/a&gt;
+					&lt;ul&gt;
+						&lt;li&gt;
+							&lt;a href=&quot;#&quot;&gt;Sub 1&lt;/a&gt;&lt;/li&gt;
+						&lt;li&gt;
+							&lt;a href=&quot;#&quot;&gt;Sub 2&lt;/a&gt;&lt;/li&gt;
+						&lt;li&gt;
+							&lt;a href=&quot;#&quot;&gt;Sub 3&lt;/a&gt;&lt;/li&gt;
+						&lt;li&gt;
+							&lt;a href=&quot;#&quot;&gt;Sub 4&lt;/a&gt;&lt;/li&gt;
+					&lt;/ul&gt;
+				&lt;/li&gt;
+				&lt;li&gt;
+					&lt;a href=&quot;#three&quot;&gt;Item three&lt;/a&gt;&lt;/li&gt;
+			&lt;/ul&gt;
+			&lt;div class=&quot;menu-icon-wrapper m-align m-center m-right&quot;&gt;
+				&lt;div id=&quot;menu-icon&quot;&gt;
+					&lt;span class=&quot;first&quot;&gt;&lt;/span&gt;
+					&lt;span class=&quot;second&quot;&gt;&lt;/span&gt;
+					&lt;span class=&quot;third&quot;&gt;&lt;/span&gt;
+				&lt;/div&gt;
+			&lt;/div&gt;
+		&lt;/header&gt;
+			</pre>
+			<p>The JS for opening the menu on mobile/tablet is just four lines (no dependencies):</p>
+			<pre>
+		document.querySelector("#menu-icon").addEventListener("click", function () {
+			document.querySelector("ul.menu").classList.toggle("show");
+			document.querySelector("#menu-icon").classList.toggle("active");
+		});
+			</pre>
+			<h1 id="customization">Customization</h1>
+			<p>You can customize the grid <a href="http://sahassar.github.io/css-framework/build/">here</a>
+			</p>
+			<div id="examples">
+				<h2 id="aligned-columns">Example: Equal colums with aligned footer:</h2>
+				<div class="flex margin padding">
+					<div class="four m-six s-twelve flex margin col">
+						<div class="no-grow align center">
+							<h2 class="no-grow align center">Damn that dog</h2></div>
+						<p>Damn that dog . Curl into a furry donut chirp at birds and knock dish off table head butt cant eat out of my own dish steal the warm chair right after you get up so lick arm hair curl into a furry donut. Behind the couch knock over christmas tree i am the best mew, yet eat prawns daintily with a claw then lick paws clean wash down prawns with a lap of carnation milk then retire to the warmest spot on the couch to claw at the fabric before taking a catnap but present belly, scratch hand when stroked. Bathe private parts with tongue then lick owner's face run in circles. Use lap as chair spread kitty litter all over house yet burrow under covers all of a sudden cat goes crazy fall over dead (not really but gets sypathy), so loves cheeseburgers but make meme, make cute face. Unwrap toilet paper meow pee in the shoe. Stare at the wall, play with food and get confused by dust stare at the wall, play with food and get confused by dust, chase imaginary bugs, so poop on grasses give attitude, or chase laser pelt around the house and up and down stairs chasing phantoms. Play time. </p>
+						<div class="no-grow align center">
+							<a href="#" class="button">Read more...</a>
+						</div>
+					</div>
+					<div class="four m-six s-twelve flex margin col">
+						<div class="no-grow align center">
+							<h2>percolator seasonal</h2></div>
+						<p>Eu strong spoon percolator seasonal so grounds lungo medium espresso galão. Sweet redeye instant caramelization beans brewed aftertaste rich. Crema froth, foam extra, beans, doppio, frappuccino americano viennese organic extraction. Cultivar coffee extra percolator cultivar grounds medium that galão. And, id, aftertaste, breve, whipped macchiato aromatic americano ristretto. White plunger pot pumpkin spice, qui eu, sweet, and aroma sugar chicory carajillo variety.</p>
+						<div class="no-grow align center">
+							<a href="#" class="button">Read more...</a>
+						</div>
+					</div>
+					<div class="four m-six s-twelve flex margin col">
+						<div class="no-grow align center">
+							<h2 class="no-grow align center">rump swine</h2></div>
+						<p>Bacon ipsum dolor amet rump swine pastrami shankle. Boudin frankfurter capicola, jowl meatball beef bresaola ground round kevin brisket picanha chuck. Leberkas turkey ball tip kielbasa swine drumstick biltong doner beef ribs pork belly cow kevin turducken frankfurter. Brisket capicola rump jowl chicken cow tri-tip turkey. Pork loin corned beef jerky leberkas chicken tail pork chop pork belly ground round shankle bacon hamburger landjaeger kevin. Tenderloin leberkas ribeye chicken pancetta brisket picanha, porchetta short loin meatloaf kevin tail turkey strip steak jowl. Jerky sausage spare ribs, ball tip biltong beef tongue fatback short loin boudin leberkas strip steak cow..</p>
+						<div class="no-grow align center">
+							<a href="#" class="button">Read more...</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
     <script src="dist/custom.js"></script>
     <script>
         document.querySelector(".toggle-margin").addEventListener("click", function () {

@@ -1,16 +1,22 @@
-/*!
- *! Imports and variables
- *! base.css
- *!
+/*
+ * Imports and variables
+ * base.css
+ *
  */
+ 
+@import '/source/normalize.css';
+@import '/source/general_styling.css';
+@import '/source/grid.css';
+@import '/source/aligners.css';
+@import '/source/menu.css';
 
 :root {
     /* general_styling settings */
     --container-max-width: 1100px;
 
     /* Grid padding/margins */
-    --padding: 1%; /* Must be a percentage value if you want IE10 compatability */
-    --margin: 1%; /* Must be a percentage value if you want IE10 compatability */
+    --padding: 1em; /* Must be a percentage value if you want IE10 compatability */
+    --margin: 1em; /* Must be a percentage value if you want IE10 compatability */
     --vertical-padding: 1em; /* must NOT be a percentage value for compatability with proper specs and firefox */
     --vertical-margin: 1em; /* must NOT be a percentage value for compatability with proper specs and firefox */
 
@@ -23,11 +29,5 @@
     --breakpoint-menu: 1100px;
     --fixed-header-height: 10vh;
 }
-
-@import url(normalize.css);
-@import url(general_styling.css);
-@import url(grid.css);
-@import url(aligners.css);
-@import url(menu.css);
 
 /* Your styles here */
