@@ -5,14 +5,29 @@
  */
 
 :root {
+    /* general_styling settings */
+    --container-max-width: 1100px;
+
+    /* Grid padding/margins */
     --padding: 1%; /* Must be a percentage value if you want IE10 compatability */
     --margin: 1%; /* Must be a percentage value if you want IE10 compatability */
     --vertical-padding: 1em; /* must NOT be a percentage value for compatability with proper specs and firefox */
     --vertical-margin: 1em; /* must NOT be a percentage value for compatability with proper specs and firefox */
+
+    /* Grid/aligners breakpoint */
     --breakpoint-m: 1100px;
     --breakpoint-s: 800px;
     --breakpoint-xs: 500px;
+
+    /* Menu settings */
     --breakpoint-menu: 1100px;
-    --container-max-width: 1100px;
     --fixed-header-height: 10vh;
 }
+
+@import url(normalize.css);
+@import url(general_styling.css);
+@import url(grid.css);
+@import url(aligners.css);
+@import url(menu.css);
+
+/* Your styles here */
