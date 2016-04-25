@@ -84,9 +84,7 @@
 	<div class="flex">
 		<div class="two m-three">
 			<nav>
-				<a href="/" class="navheader">
-                    Flex framework
-                </a>
+				<a href="/" class="navheader">Flex framework</a>
 				<ul>
 					<li>
 						<a href="#">Intro & Compatability</a>
@@ -132,13 +130,14 @@
 			<p>In addition to these we usually use normalize.css as our reset and <a href="https://github.com/peduarte/wallop">wallop</a> or <a href="https://github.com/kenwheeler/slick">slick</a> as a carousel.</p>
 			<h2>Compatability</h2>
 			<p>The components are compatible with modern browsers (IE11+). It is tested on:</p>
-				<ul>
-					<li>IE11 (IE10 as long as you use percentages for horizontal paddings/margins for the grid)</li>
-					<li>Edge 12, 13</li>
-					<li>Safari 8, 9</li>
-					<li>Chrome</li>
-					<li>Firefox</li>
-				</ul>
+			<ul>
+				<li>IE11 (IE10 as long as you use percentages for horizontal paddings/margins for the grid)</li>
+				<li>Edge 12, 13</li>
+				<li>Safari 8, 9</li>
+				<li>Chrome</li>
+				<li>Firefox</li>
+			</ul>
+			<p>We use content-box sizing for the grid since IE10-11 cannot use border-box and flex-box in combination. If you don't support IE10-11 you can remove the contentbox and set the padding on the grid to whatever you feel like. This is also the reason that you cannot add borders to the grid columns.</p>
 			<h1 id="grid">Grid</h1>
 			<p>The base grid is constructed with a container with the class <code>flex</code>, which then contains columns with classes <code>one</code> through <code>twelve</code>, or the additional class <code>fifth</code></p>
 			<button class="toggle-margin">Toggle margin class on grid</button>
