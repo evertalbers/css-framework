@@ -403,6 +403,39 @@
 					</div>
 				</div>
 			</div>
+			<div>
+				<h1>unsorted stuff</h1>
+				<h2>Preload links on hover</h2>
+<pre><code>
+$('a[href^="/"]').one('mouseenter', function() {
+    var clicked, loaded, that = this;
+    $.get($(that).attr('href')).always(function() {
+        loaded = true;
+        if(clicked){
+            window.location = $(that).attr('href');
+        }
+    });
+    $(that).one('click', function(e) {
+        e.preventDefault();
+        clicked = true;
+        if(loaded){
+            window.location = $(that).attr('href');
+        }
+    });
+});
+</code></pre>
+				<h2>Responsive typography</h2>
+<pre><code>
+html {
+    font-size: calc(100% + 2 * (100vw - 600px) / 600);
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+}
+</code></pre>
+			</div>
 		</div>
 	</div>
     <script src="dist/custom.js"></script>
